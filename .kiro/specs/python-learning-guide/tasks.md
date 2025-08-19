@@ -72,7 +72,7 @@
   - Write debugging techniques and error message interpretation
   - _Requirements: 2.3, 4.3_
 
-- [ ] 9. Build Intermediate Level - Modules and Packages section
+- [x] 9. Build Intermediate Level - Modules and Packages section
 
   - Write import statements and different import methods
   - Implement creating custom modules with examples
@@ -81,7 +81,7 @@
   - Write virtual environments setup and usage
   - _Requirements: 2.4, 4.2_
 
-- [ ] 10. Build Advanced Level - Object-Oriented Programming section
+- [-] 10. Build Advanced Level - Object-Oriented Programming section
 
   - Write class definition and object creation with practical examples
   - Implement attributes and methods (instance, class, static)
