@@ -81,7 +81,7 @@
   - Write virtual environments setup and usage
   - _Requirements: 2.4, 4.2_
 
-- [-] 10. Build Advanced Level - Object-Oriented Programming section
+- [x] 10. Build Advanced Level - Object-Oriented Programming section
 
   - Write class definition and object creation with practical examples
   - Implement attributes and methods (instance, class, static)
@@ -91,7 +91,7 @@
   - Implement special methods (**init**, **str**, **repr**, etc.)
   - _Requirements: 3.1, 3.3_
 
-- [ ] 11. Build Advanced Level - Advanced Features section
+- [x] 11. Build Advanced Level - Advanced Features section
 
   - Write decorators section with function and class decorators
   - Implement generators and yield keyword with memory efficiency examples
@@ -101,7 +101,7 @@
   - Implement advanced function features (args, kwargs, closures)
   - _Requirements: 3.2, 3.4_
 
-- [ ] 12. Build Advanced Level - File Handling section
+- [-] 12. Build Advanced Level - File Handling section
 
   - Write file reading and writing with different modes
   - Implement CSV file handling with csv module

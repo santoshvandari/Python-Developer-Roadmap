@@ -1724,36 +1724,1484 @@ number_guessing_game()
 
 ### Object-Oriented Programming
 
-**Classes and Objects:**
+Object-Oriented Programming (OOP) is a programming paradigm that organizes code into classes and objects, making it easier to model real-world entities and relationships.
+
+#### Classes and Objects
+
+**Basic Class Definition:**
 
 ```python
+class Person:
+    """A class representing a person."""
+    
+    # Class variable (shared by all instances)
+    species = "Homo sapiens"
+    
+    def __init__(self, name, age):
+        """Initialize a new Person instance."""
+        # Instance variables (unique to each instance)
+        self.name = name
+        self.age = age
+        self.friends = []
+    
+    def introduce(self):
+        """Return an introduction string."""
+        return f"Hi, I'm {self.name} and I'm {self.age} years old"
+    
+    def have_birthday(self):
+        """Increase age by 1."""
+        self.age += 1
+        return f"Happy birthday! {self.name} is now {self.age}"
+    
+    def add_friend(self, friend):
+        """Add a friend to the friends list."""
+        if friend not in self.friends:
+            self.friends.append(friend)
+            return f"{friend} is now {self.name}'s friend"
+        return f"{friend} is already {self.name}'s friend"
+
+# Creating objects (instances)
+person1 = Person("Alice", 30)
+person2 = Person("Bob", 25)
+
+# Using object methods
+print(person1.introduce())  # Output: Hi, I'm Alice and I'm 30 years old
+print(person1.have_birthday())  # Output: Happy birthday! Alice is now 31
+
+# Accessing attributes
+print(f"Name: {person1.name}")  # Output: Name: Alice
+print(f"Species: {person1.species}")  # Output: Species: Homo sapiens
+
+# Class variables are shared
+print(f"Person1 species: {person1.species}")
+print(f"Person2 species: {person2.species}")
+Person.species = "Human"  # Changes for all instances
+print(f"Person1 species: {person1.species}")  # Output: Human
+```
+
+#### Attributes and Methods
+
+**Instance vs Class Attributes:**
+
+```python
+class BankAccount:
+    """A class representing a bank account."""
+    
+    # Class variables
+    bank_name = "Python Bank"
+    interest_rate = 0.02
+    total_accounts = 0
+    
+    def __init__(self, account_holder, initial_balance=0):
+        """Initialize a new bank account."""
+        # Instance variables
+        self.account_holder = account_holder
+        self.balance = initial_balance
+        self.transaction_history = []
+        
+        # Increment class variable
+        BankAccount.total_accounts += 1
+        self.account_number = f"ACC{BankAccount.total_accounts:04d}"
+    
+    def deposit(self, amount):
+        """Deposit money to the account."""
+        if amount > 0:
+            self.balance += amount
+            self.transaction_history.append(f"Deposited ${amount}")
+            return f"Deposited ${amount}. New balance: ${self.balance}"
+        return "Invalid deposit amount"
+    
+    def withdraw(self, amount):
+        """Withdraw money from the account."""
+        if amount > 0 and amount <= self.balance:
+            self.balance -= amount
+            self.transaction_history.append(f"Withdrew ${amount}")
+            return f"Withdrew ${amount}. New balance: ${self.balance}"
+        return "Invalid withdrawal amount or insufficient funds"
+    
+    def get_balance(self):
+        """Get current balance."""
+        return self.balance
+    
+    def apply_interest(self):
+        """Apply interest to the account."""
+        interest = self.balance * self.interest_rate
+        self.balance += interest
+        self.transaction_history.append(f"Interest applied: ${interest:.2f}")
+        return f"Interest applied: ${interest:.2f}"
+    
+    @classmethod
+    def get_bank_info(cls):
+        """Get bank information (class method)."""
+        return f"Bank: {cls.bank_name}, Total Accounts: {cls.total_accounts}"
+    
+    @staticmethod
+    def validate_account_number(account_number):
+        """Validate account number format (static method)."""
+        return account_number.startswith("ACC") and len(account_number) == 7
+
+# Using the BankAccount class
+account1 = BankAccount("Alice", 1000)
+account2 = BankAccount("Bob", 500)
+
+print(account1.deposit(200))
+print(account1.withdraw(150))
+print(account1.apply_interest())
+
+# Class method usage
+print(BankAccount.get_bank_info())
+
+# Static method usage
+print(BankAccount.validate_account_number("ACC0001"))  # True
+print(BankAccount.validate_account_number("XYZ123"))   # False
+```
+
+**Property Decorators:**
+
+```python
+class Temperature:
+    """A class for temperature conversion with properties."""
+    
+    def __init__(self, celsius=0):
+        """Initialize with Celsius temperature."""
+        self._celsius = celsius
+    
+    @property
+    def celsius(self):
+        """Get temperature in Celsius."""
+        return self._celsius
+    
+    @celsius.setter
+    def celsius(self, value):
+        """Set temperature in Celsius with validation."""
+        if value < -273.15:
+            raise ValueError("Temperature cannot be below absolute zero")
+        self._celsius = value
+    
+    @property
+    def fahrenheit(self):
+        """Get temperature in Fahrenheit."""
+        return (self._celsius * 9/5) + 32
+    
+    @fahrenheit.setter
+    def fahrenheit(self, value):
+        """Set temperature using Fahrenheit."""
+        self.celsius = (value - 32) * 5/9
+    
+    @property
+    def kelvin(self):
+        """Get temperature in Kelvin."""
+        return self._celsius + 273.15
+    
+    @kelvin.setter
+    def kelvin(self, value):
+        """Set temperature using Kelvin."""
+        self.celsius = value - 273.15
+    
+    def __str__(self):
+        """String representation of temperature."""
+        return f"{self._celsius}°C ({self.fahrenheit}°F, {self.kelvin}K)"
+
+# Using properties
+temp = Temperature(25)
+print(temp)  # Output: 25°C (77.0°F, 298.15K)
+
+temp.fahrenheit = 100
+print(temp)  # Output: 37.77777777777778°C (100.0°F, 310.92777777777775K)
+
+temp.kelvin = 300
+print(temp)  # Output: 26.850000000000023°C (80.33000000000004°F, 300K)
+```
+
+#### Inheritance
+
+**Basic Inheritance:**
+
+```python
+class Animal:
+    """Base class for all animals."""
+    
+    def __init__(self, name, species):
+        self.name = name
+        self.species = species
+        self.is_alive = True
+    
+    def eat(self, food):
+        return f"{self.name} is eating {food}"
+    
+    def sleep(self):
+        return f"{self.name} is sleeping"
+    
+    def make_sound(self):
+        return f"{self.name} makes a sound"
+
+class Dog(Animal):
+    """Dog class inheriting from Animal."""
+    
+    def __init__(self, name, breed):
+        super().__init__(name, "Canis lupus")  # Call parent constructor
+        self.breed = breed
+        self.tricks = []
+    
+    def make_sound(self):  # Override parent method
+        return f"{self.name} barks: Woof!"
+    
+    def learn_trick(self, trick):
+        self.tricks.append(trick)
+        return f"{self.name} learned {trick}"
+    
+    def perform_trick(self, trick):
+        if trick in self.tricks:
+            return f"{self.name} performs {trick}"
+        return f"{self.name} doesn't know {trick}"
+
+class Cat(Animal):
+    """Cat class inheriting from Animal."""
+    
+    def __init__(self, name, indoor=True):
+        super().__init__(name, "Felis catus")
+        self.indoor = indoor
+        self.lives = 9
+    
+    def make_sound(self):  # Override parent method
+        return f"{self.name} meows: Meow!"
+    
+    def climb(self):
+        return f"{self.name} climbs gracefully"
+    
+    def use_litter_box(self):
+        if self.indoor:
+            return f"{self.name} uses the litter box"
+        return f"{self.name} goes outside"
+
+# Using inheritance
+dog = Dog("Buddy", "Golden Retriever")
+cat = Cat("Whiskers", indoor=True)
+
+print(dog.eat("kibble"))      # Inherited method
+print(dog.make_sound())       # Overridden method
+print(dog.learn_trick("sit")) # Dog-specific method
+
+print(cat.eat("fish"))        # Inherited method
+print(cat.make_sound())       # Overridden method
+print(cat.climb())            # Cat-specific method
+```
+
+**Multiple Inheritance:**
+
+```python
+class Flyable:
+    """Mixin class for flying ability."""
+    
+    def fly(self):
+        return f"{self.name} is flying"
+    
+    def land(self):
+        return f"{self.name} has landed"
+
+class Swimmable:
+    """Mixin class for swimming ability."""
+    
+    def swim(self):
+        return f"{self.name} is swimming"
+    
+    def dive(self):
+        return f"{self.name} dives underwater"
+
+class Bird(Animal, Flyable):
+    """Bird class with flying ability."""
+    
+    def __init__(self, name, wingspan):
+        super().__init__(name, "Aves")
+        self.wingspan = wingspan
+    
+    def make_sound(self):
+        return f"{self.name} chirps"
+
+class Duck(Bird, Swimmable):
+    """Duck class that can both fly and swim."""
+    
+    def __init__(self, name):
+        super().__init__(name, wingspan=24)  # Average duck wingspan in inches
+    
+    def make_sound(self):
+        return f"{self.name} quacks"
+
+# Using multiple inheritance
+duck = Duck("Donald")
+print(duck.make_sound())  # Output: Donald quacks
+print(duck.fly())         # From Flyable mixin
+print(duck.swim())        # From Swimmable mixin
+print(duck.eat("bread"))  # From Animal base class
+
+# Method Resolution Order (MRO)
+print(Duck.__mro__)  # Shows the order Python searches for methods
+```
+
+#### Polymorphism
+
+**Method Overriding and Polymorphism:**
+
+```python
+class Shape:
+    """Base class for geometric shapes."""
+    
+    def __init__(self, name):
+        self.name = name
+    
+    def area(self):
+        """Calculate area - to be overridden by subclasses."""
+        raise NotImplementedError("Subclass must implement area method")
+    
+    def perimeter(self):
+        """Calculate perimeter - to be overridden by subclasses."""
+        raise NotImplementedError("Subclass must implement perimeter method")
+    
+    def describe(self):
+        """Describe the shape."""
+        return f"This is a {self.name}"
+
+class Rectangle(Shape):
+    """Rectangle shape."""
+    
+    def __init__(self, width, height):
+        super().__init__("Rectangle")
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+    
+    def perimeter(self):
+        return 2 * (self.width + self.height)
+
+class Circle(Shape):
+    """Circle shape."""
+    
+    def __init__(self, radius):
+        super().__init__("Circle")
+        self.radius = radius
+    
+    def area(self):
+        return 3.14159 * self.radius ** 2
+    
+    def perimeter(self):
+        return 2 * 3.14159 * self.radius
+
+class Triangle(Shape):
+    """Triangle shape."""
+    
+    def __init__(self, side1, side2, side3):
+        super().__init__("Triangle")
+        self.side1 = side1
+        self.side2 = side2
+        self.side3 = side3
+    
+    def area(self):
+        # Using Heron's formula
+        s = self.perimeter() / 2
+        return (s * (s - self.side1) * (s - self.side2) * (s - self.side3)) ** 0.5
+    
+    def perimeter(self):
+        return self.side1 + self.side2 + self.side3
+
+# Polymorphism in action
+shapes = [
+    Rectangle(5, 4),
+    Circle(3),
+    Triangle(3, 4, 5)
+]
+
+# Same method calls work on different object types
+for shape in shapes:
+    print(f"{shape.describe()}")
+    print(f"Area: {shape.area():.2f}")
+    print(f"Perimeter: {shape.perimeter():.2f}")
+    print("-" * 30)
+```
+
+#### Encapsulation
+
+**Private and Protected Attributes:**
+
+```python
+class BankAccount:
+    """Demonstrates encapsulation with private attributes."""
+    
+    def __init__(self, account_holder, initial_balance=0):
+        self.account_holder = account_holder  # Public
+        self._account_number = self._generate_account_number()  # Protected
+        self.__balance = initial_balance  # Private
+        self.__pin = None  # Private
+    
+    def _generate_account_number(self):
+        """Protected method - internal use."""
+        import random
+        return f"ACC{random.randint(10000, 99999)}"
+    
+    def __validate_transaction(self, amount):
+        """Private method - internal validation."""
+        return isinstance(amount, (int, float)) and amount > 0
+    
+    def set_pin(self, pin):
+        """Set account PIN."""
+        if len(str(pin)) == 4:
+            self.__pin = pin
+            return "PIN set successfully"
+        return "PIN must be 4 digits"
+    
+    def deposit(self, amount, pin=None):
+        """Deposit money with optional PIN verification."""
+        if not self.__validate_transaction(amount):
+            return "Invalid amount"
+        
+        if self.__pin and pin != self.__pin:
+            return "Invalid PIN"
+        
+        self.__balance += amount
+        return f"Deposited ${amount}. New balance: ${self.__balance}"
+    
+    def withdraw(self, amount, pin):
+        """Withdraw money with PIN verification."""
+        if not self.__validate_transaction(amount):
+            return "Invalid amount"
+        
+        if pin != self.__pin:
+            return "Invalid PIN"
+        
+        if amount > self.__balance:
+            return "Insufficient funds"
+        
+        self.__balance -= amount
+        return f"Withdrew ${amount}. New balance: ${self.__balance}"
+    
+    def get_balance(self, pin):
+        """Get balance with PIN verification."""
+        if pin != self.__pin:
+            return "Invalid PIN"
+        return self.__balance
+    
+    @property
+    def account_info(self):
+        """Get public account information."""
+        return {
+            "holder": self.account_holder,
+            "account_number": self._account_number
+        }
+
+# Using encapsulation
+account = BankAccount("Alice", 1000)
+
+# Public access
+print(account.account_holder)  # Works
+print(account.account_info)    # Works
+
+# Protected access (by convention, shouldn't be used externally)
+print(account._account_number)  # Works but not recommended
+
+# Private access (name mangling makes it harder to access)
+# print(account.__balance)  # AttributeError
+# print(account._BankAccount__balance)  # Works but strongly discouraged
+
+# Proper way to access private data
+account.set_pin(1234)
+print(account.get_balance(1234))  # Output: 1000
+print(account.withdraw(200, 1234))  # Output: Withdrew $200. New balance: $800
+```
+
+#### Special Methods
+
+**Magic Methods (Dunder Methods):**
+
+```python
+class Vector:
+    """A 2D vector class demonstrating special methods."""
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __str__(self):
+        """String representation for users."""
+        return f"Vector({self.x}, {self.y})"
+    
+    def __repr__(self):
+        """String representation for developers."""
+        return f"Vector(x={self.x}, y={self.y})"
+    
+    def __add__(self, other):
+        """Add two vectors."""
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y)
+        return NotImplemented
+    
+    def __sub__(self, other):
+        """Subtract two vectors."""
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y)
+        return NotImplemented
+    
+    def __mul__(self, scalar):
+        """Multiply vector by scalar."""
+        if isinstance(scalar, (int, float)):
+            return Vector(self.x * scalar, self.y * scalar)
+        return NotImplemented
+    
+    def __rmul__(self, scalar):
+        """Right multiplication (scalar * vector)."""
+        return self.__mul__(scalar)
+    
+    def __eq__(self, other):
+        """Check equality."""
+        if isinstance(other, Vector):
+            return self.x == other.x and self.y == other.y
+        return False
+    
+    def __lt__(self, other):
+        """Less than comparison (by magnitude)."""
+        if isinstance(other, Vector):
+            return self.magnitude() < other.magnitude()
+        return NotImplemented
+    
+    def __len__(self):
+        """Return magnitude as length."""
+        return int(self.magnitude())
+    
+    def __getitem__(self, index):
+        """Allow indexing."""
+        if index == 0:
+            return self.x
+        elif index == 1:
+            return self.y
+        else:
+            raise IndexError("Vector index out of range")
+    
+    def __setitem__(self, index, value):
+        """Allow item assignment."""
+        if index == 0:
+            self.x = value
+        elif index == 1:
+            self.y = value
+        else:
+            raise IndexError("Vector index out of range")
+    
+    def magnitude(self):
+        """Calculate vector magnitude."""
+        return (self.x ** 2 + self.y ** 2) ** 0.5
+    
+    def normalize(self):
+        """Return normalized vector."""
+        mag = self.magnitude()
+        if mag == 0:
+            return Vector(0, 0)
+        return Vector(self.x / mag, self.y / mag)
+
+# Using special methods
+v1 = Vector(3, 4)
+v2 = Vector(1, 2)
+
+print(v1)           # Output: Vector(3, 4) (uses __str__)
+print(repr(v1))     # Output: Vector(x=3, y=4) (uses __repr__)
+
+# Arithmetic operations
+v3 = v1 + v2        # Uses __add__
+print(v3)           # Output: Vector(4, 6)
+
+v4 = v1 * 2         # Uses __mul__
+print(v4)           # Output: Vector(6, 8)
+
+v5 = 3 * v1         # Uses __rmul__
+print(v5)           # Output: Vector(9, 12)
+
+# Comparison operations
+print(v1 == v2)     # Output: False (uses __eq__)
+print(v1 < v2)      # Output: False (uses __lt__)
+
+# Length and indexing
+print(len(v1))      # Output: 5 (uses __len__)
+print(v1[0])        # Output: 3 (uses __getitem__)
+v1[1] = 5           # Uses __setitem__
+print(v1)           # Output: Vector(3, 5)
+```
+
+**Practice Exercise - Complete OOP System:**
+
+```python
+class Library:
+    """A complete library management system demonstrating OOP principles."""
+    
+    def __init__(self, name):
+        self.name = name
+        self._books = []
+        self._members = []
+        self._borrowed_books = {}
+    
+    def add_book(self, book):
+        """Add a book to the library."""
+        self._books.append(book)
+        return f"Added '{book.title}' to {self.name}"
+    
+    def add_member(self, member):
+        """Add a member to the library."""
+        self._members.append(member)
+        return f"Added member: {member.name}"
+    
+    def borrow_book(self, member, book_title):
+        """Allow a member to borrow a book."""
+        book = self._find_book(book_title)
+        if not book:
+            return f"Book '{book_title}' not found"
+        
+        if book.is_available:
+            book.borrow()
+            if member.member_id not in self._borrowed_books:
+                self._borrowed_books[member.member_id] = []
+            self._borrowed_books[member.member_id].append(book)
+            return f"{member.name} borrowed '{book.title}'"
+        else:
+            return f"'{book.title}' is not available"
+    
+    def return_book(self, member, book_title):
+        """Allow a member to return a book."""
+        if member.member_id in self._borrowed_books:
+            for book in self._borrowed_books[member.member_id]:
+                if book.title == book_title:
+                    book.return_book()
+                    self._borrowed_books[member.member_id].remove(book)
+                    return f"{member.name} returned '{book.title}'"
+        return f"Book '{book_title}' was not borrowed by {member.name}"
+    
+    def _find_book(self, title):
+        """Private method to find a book by title."""
+        for book in self._books:
+            if book.title.lower() == title.lower():
+                return book
+        return None
+    
+    def get_available_books(self):
+        """Get list of available books."""
+        return [book for book in self._books if book.is_available]
+    
+    def __str__(self):
+        return f"Library: {self.name} ({len(self._books)} books, {len(self._members)} members)"
+
+class Book:
+    """Book class with encapsulation."""
+    
+    def __init__(self, title, author, isbn):
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self._is_available = True
+        self._borrow_count = 0
+    
+    @property
+    def is_available(self):
+        return self._is_available
+    
+    def borrow(self):
+        """Mark book as borrowed."""
+        if self._is_available:
+            self._is_available = False
+            self._borrow_count += 1
+            return True
+        return False
+    
+    def return_book(self):
+        """Mark book as returned."""
+        self._is_available = True
+    
+    def __str__(self):
+        status = "Available" if self._is_available else "Borrowed"
+        return f"'{self.title}' by {self.author} - {status}"
+    
+    def __eq__(self, other):
+        if isinstance(other, Book):
+            return self.isbn == other.isbn
+        return False
+
+class Member:
+    """Library member class."""
+    
+    _next_id = 1
+    
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+        self.member_id = Member._next_id
+        Member._next_id += 1
+        self._join_date = "2024-01-01"  # Simplified
+    
+    def __str__(self):
+        return f"Member: {self.name} (ID: {self.member_id})"
+
+# Using the complete OOP system
+library = Library("City Library")
+
+# Create books
+book1 = Book("Python Programming", "John Doe", "978-1234567890")
+book2 = Book("Data Science Handbook", "Jane Smith", "978-0987654321")
+book3 = Book("Web Development", "Bob Johnson", "978-1122334455")
+
+# Create members
+member1 = Member("Alice Brown", "alice@email.com")
+member2 = Member("Charlie Davis", "charlie@email.com")
+
+# Add books and members to library
+library.add_book(book1)
+library.add_book(book2)
+library.add_book(book3)
+library.add_member(member1)
+library.add_member(member2)
+
+print(library)
+
+# Borrow and return books
+print(library.borrow_book(member1, "Python Programming"))
+print(library.borrow_book(member2, "Python Programming"))  # Should fail
+print(library.return_book(member1, "Python Programming"))
+print(library.borrow_book(member2, "Python Programming"))  # Should work now
+
+# Display available books
+available = library.get_available_books()
+print(f"\nAvailable books: {len(available)}")
+for book in available:
+    print(f"  {book}")
+```
+
+**Key Takeaways:**
+
+- Classes define blueprints for objects with attributes and methods
+- Inheritance allows classes to inherit and extend functionality from parent classes
+- Polymorphism enables different classes to be used interchangeably through common interfaces
+- Encapsulation hides internal implementation details and protects data integrity
+- Special methods enable custom behavior for built-in operations
+- Use `@property` decorators for controlled attribute access
+- Multiple inheritance should be used carefully with mixin classes
+- Follow naming conventions: public, _protected, __private
+
+### Advanced Features
+
+Python offers several advanced features that enable more sophisticated programming patterns and improved code efficiency.
+
+#### Decorators
+
+Decorators are a powerful feature that allows you to modify or extend the behavior of functions and classes.
+
+**Function Decorators:**
+
+```python
+# Basic decorator
+def my_decorator(func):
+    """A simple decorator that adds functionality to a function."""
+    def wrapper(*args, **kwargs):
+        print(f"Before calling {func.__name__}")
+        result = func(*args, **kwargs)
+        print(f"After calling {func.__name__}")
+        return result
+    return wrapper
+
+@my_decorator
+def greet(name):
+    """A simple greeting function."""
+    return f"Hello, {name}!"
+
+# Using the decorated function
+print(greet("Alice"))
+# Output:
+# Before calling greet
+# Hello, Alice!
+# After calling greet
+
+# Decorator with parameters
+def repeat(times):
+    """Decorator that repeats function execution."""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            results = []
+            for _ in range(times):
+                result = func(*args, **kwargs)
+                results.append(result)
+            return results
+        return wrapper
+    return decorator
+
+@repeat(3)
+def say_hello():
+    return "Hello!"
+
+print(say_hello())  # Output: ['Hello!', 'Hello!', 'Hello!']
+```
+
+**Practical Decorators:**
+
+```python
+import time
+import functools
+from datetime import datetime
+
+# Timing decorator
+def timer(func):
+    """Decorator to measure function execution time."""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} took {end_time - start_time:.4f} seconds")
+        return result
+    return wrapper
+
+# Logging decorator
+def log_calls(func):
+    """Decorator to log function calls."""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{timestamp}] Calling {func.__name__} with args={args}, kwargs={kwargs}")
+        result = func(*args, **kwargs)
+        print(f"[{timestamp}] {func.__name__} returned {result}")
+        return result
+    return wrapper
+
+# Caching decorator
+def memoize(func):
+    """Decorator to cache function results."""
+    cache = {}
+    
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        # Create a key from arguments
+        key = str(args) + str(sorted(kwargs.items()))
+        
+        if key in cache:
+            print(f"Cache hit for {func.__name__}")
+            return cache[key]
+        
+        print(f"Cache miss for {func.__name__}")
+        result = func(*args, **kwargs)
+        cache[key] = result
+        return result
+    
+    return wrapper
+
+# Using multiple decorators
+@timer
+@log_calls
+@memoize
+def fibonacci(n):
+    """Calculate fibonacci number recursively."""
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Test the decorated function
+print(f"Fibonacci(10) = {fibonacci(10)}")
+print(f"Fibonacci(10) = {fibonacci(10)}")  # Should use cache
+```
+
+**Class Decorators:**
+
+```python
+def add_string_representation(cls):
+    """Class decorator to add string representation."""
+    def __str__(self):
+        attrs = ', '.join(f"{k}={v}" for k, v in self.__dict__.items())
+        return f"{cls.__name__}({attrs})"
+    
+    cls.__str__ = __str__
+    return cls
+
+@add_string_representation
 class Person:
     def __init__(self, name, age):
         self.name = name
         self.age = age
-    
-    def introduce(self):
-        return f"Hi, I'm {self.name} and I'm {self.age} years old"
 
 person = Person("Alice", 30)
-print(person.introduce())
+print(person)  # Output: Person(name=Alice, age=30)
+
+# Property decorator for validation
+def validate_positive(func):
+    """Decorator for property setters to validate positive values."""
+    @functools.wraps(func)
+    def wrapper(self, value):
+        if value <= 0:
+            raise ValueError(f"{func.__name__} must be positive")
+        return func(self, value)
+    return wrapper
+
+class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+    
+    @property
+    def radius(self):
+        return self._radius
+    
+    @radius.setter
+    @validate_positive
+    def radius(self, value):
+        self._radius = value
+    
+    @property
+    def area(self):
+        return 3.14159 * self._radius ** 2
+
+circle = Circle(5)
+print(f"Area: {circle.area}")
+# circle.radius = -1  # Would raise ValueError
 ```
 
-**Inheritance:**
+#### Generators
+
+Generators are functions that return an iterator object, allowing you to iterate over a sequence of values without storing them all in memory.
+
+**Basic Generators:**
 
 ```python
-class Student(Person):
-    def __init__(self, name, age, student_id):
-        super().__init__(name, age)
-        self.student_id = student_id
-    
-    def study(self, subject):
-        return f"{self.name} is studying {subject}"
+# Generator function
+def count_up_to(max_count):
+    """Generator that counts from 1 to max_count."""
+    count = 1
+    while count <= max_count:
+        yield count
+        count += 1
 
-student = Student("Bob", 20, "S123")
-print(student.introduce())
-print(student.study("Python"))
+# Using the generator
+counter = count_up_to(5)
+print(type(counter))  # Output: <class 'generator'>
+
+for num in counter:
+    print(num)  # Output: 1, 2, 3, 4, 5
+
+# Generator expressions
+squares = (x**2 for x in range(10))
+print(list(squares))  # Output: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# Memory efficient file reading
+def read_large_file(file_path):
+    """Generator to read large files line by line."""
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                yield line.strip()
+    except FileNotFoundError:
+        print(f"File {file_path} not found")
+        return
+
+# Fibonacci generator
+def fibonacci_generator():
+    """Infinite Fibonacci sequence generator."""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+# Using Fibonacci generator
+fib = fibonacci_generator()
+first_10_fibs = [next(fib) for _ in range(10)]
+print(first_10_fibs)  # Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 ```
+
+**Advanced Generator Patterns:**
+
+```python
+# Generator with send() method
+def accumulator():
+    """Generator that accumulates sent values."""
+    total = 0
+    while True:
+        value = yield total
+        if value is not None:
+            total += value
+
+acc = accumulator()
+next(acc)  # Prime the generator
+print(acc.send(10))  # Output: 10
+print(acc.send(5))   # Output: 15
+print(acc.send(3))   # Output: 18
+
+# Generator pipeline
+def numbers():
+    """Generate numbers 1-10."""
+    for i in range(1, 11):
+        yield i
+
+def squares(nums):
+    """Square the input numbers."""
+    for num in nums:
+        yield num ** 2
+
+def even_only(nums):
+    """Filter even numbers only."""
+    for num in nums:
+        if num % 2 == 0:
+            yield num
+
+# Chain generators together
+pipeline = even_only(squares(numbers()))
+result = list(pipeline)
+print(result)  # Output: [4, 16, 36, 64, 100]
+
+# Generator for tree traversal
+class TreeNode:
+    def __init__(self, value, left=None, right=None):
+        self.value = value
+        self.left = left
+        self.right = right
+
+def inorder_traversal(node):
+    """Generator for inorder tree traversal."""
+    if node:
+        yield from inorder_traversal(node.left)
+        yield node.value
+        yield from inorder_traversal(node.right)
+
+# Create a binary tree
+root = TreeNode(4)
+root.left = TreeNode(2)
+root.right = TreeNode(6)
+root.left.left = TreeNode(1)
+root.left.right = TreeNode(3)
+
+# Traverse using generator
+for value in inorder_traversal(root):
+    print(value, end=" ")  # Output: 1 2 3 4 6
+print()
+```
+
+#### Context Managers
+
+Context managers ensure proper resource management using the `with` statement.
+
+**Built-in Context Managers:**
+
+```python
+# File handling with context manager
+with open('example.txt', 'w') as file:
+    file.write('Hello, World!')
+# File is automatically closed
+
+# Multiple context managers
+with open('input.txt', 'r') as infile, open('output.txt', 'w') as outfile:
+    data = infile.read()
+    outfile.write(data.upper())
+
+# Exception handling with context managers
+try:
+    with open('nonexistent.txt', 'r') as file:
+        content = file.read()
+except FileNotFoundError:
+    print("File not found, but resources are still cleaned up")
+```
+
+**Custom Context Managers:**
+
+```python
+# Using __enter__ and __exit__ methods
+class DatabaseConnection:
+    """Custom context manager for database connections."""
+    
+    def __init__(self, database_name):
+        self.database_name = database_name
+        self.connection = None
+    
+    def __enter__(self):
+        print(f"Connecting to {self.database_name}")
+        self.connection = f"Connection to {self.database_name}"
+        return self.connection
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        print(f"Closing connection to {self.database_name}")
+        if exc_type:
+            print(f"Exception occurred: {exc_value}")
+        self.connection = None
+        return False  # Don't suppress exceptions
+
+# Using custom context manager
+with DatabaseConnection("mydb") as conn:
+    print(f"Using {conn}")
+    # Connection is automatically closed
+
+# Context manager using contextlib
+from contextlib import contextmanager
+
+@contextmanager
+def timer_context(name):
+    """Context manager to time code execution."""
+    start_time = time.time()
+    print(f"Starting {name}")
+    try:
+        yield
+    finally:
+        end_time = time.time()
+        print(f"{name} took {end_time - start_time:.4f} seconds")
+
+# Using contextlib context manager
+with timer_context("Data processing"):
+    time.sleep(1)  # Simulate work
+    print("Processing data...")
+
+# Temporary directory context manager
+import tempfile
+import os
+
+@contextmanager
+def temporary_directory():
+    """Create and cleanup temporary directory."""
+    temp_dir = tempfile.mkdtemp()
+    try:
+        yield temp_dir
+    finally:
+        import shutil
+        shutil.rmtree(temp_dir)
+
+with temporary_directory() as temp_dir:
+    print(f"Working in {temp_dir}")
+    # Create files, do work...
+    temp_file = os.path.join(temp_dir, "temp.txt")
+    with open(temp_file, 'w') as f:
+        f.write("Temporary data")
+# Directory is automatically cleaned up
+```
+
+#### List Comprehensions
+
+Advanced list comprehension patterns and related comprehensions.
+
+**Advanced List Comprehensions:**
+
+```python
+# Nested list comprehensions
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+# Flatten matrix
+flattened = [num for row in matrix for num in row]
+print(flattened)  # Output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Transpose matrix
+transposed = [[row[i] for row in matrix] for i in range(len(matrix[0]))]
+print(transposed)  # Output: [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
+# Conditional comprehensions
+numbers = range(1, 21)
+even_squares = [x**2 for x in numbers if x % 2 == 0]
+print(even_squares)  # Output: [4, 16, 36, 64, 100, 144, 196, 256, 324, 400]
+
+# Complex conditions
+words = ["hello", "world", "python", "programming", "code"]
+long_words = [word.upper() for word in words if len(word) > 5 and 'o' in word]
+print(long_words)  # Output: ['PYTHON', 'PROGRAMMING']
+
+# Dictionary comprehensions
+squares_dict = {x: x**2 for x in range(1, 6)}
+print(squares_dict)  # Output: {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# Set comprehensions
+unique_lengths = {len(word) for word in words}
+print(unique_lengths)  # Output: {4, 5, 6, 11}
+
+# Generator comprehensions
+squares_gen = (x**2 for x in range(1000000))  # Memory efficient
+print(sum(x for x in squares_gen if x % 2 == 0 and x < 100))
+```
+
+#### Iterators
+
+Understanding and creating custom iterators.
+
+**Custom Iterator Classes:**
+
+```python
+class CountDown:
+    """Custom iterator that counts down from a given number."""
+    
+    def __init__(self, start):
+        self.start = start
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.start <= 0:
+            raise StopIteration
+        self.start -= 1
+        return self.start + 1
+
+# Using custom iterator
+countdown = CountDown(5)
+for num in countdown:
+    print(num)  # Output: 5, 4, 3, 2, 1
+
+# Iterator with state
+class FibonacciIterator:
+    """Iterator for Fibonacci sequence."""
+    
+    def __init__(self, max_count):
+        self.max_count = max_count
+        self.count = 0
+        self.a, self.b = 0, 1
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.count >= self.max_count:
+            raise StopIteration
+        
+        if self.count == 0:
+            self.count += 1
+            return self.a
+        elif self.count == 1:
+            self.count += 1
+            return self.b
+        else:
+            self.a, self.b = self.b, self.a + self.b
+            self.count += 1
+            return self.b
+
+fib_iter = FibonacciIterator(10)
+fib_sequence = list(fib_iter)
+print(fib_sequence)  # Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+```
+
+#### Advanced Function Features
+
+**Closures and Nonlocal:**
+
+```python
+def create_multiplier(factor):
+    """Create a function that multiplies by a factor."""
+    def multiplier(number):
+        return number * factor
+    return multiplier
+
+# Create specific multipliers
+double = create_multiplier(2)
+triple = create_multiplier(3)
+
+print(double(5))  # Output: 10
+print(triple(4))  # Output: 12
+
+# Closure with state
+def create_counter(initial=0):
+    """Create a counter function with state."""
+    count = initial
+    
+    def counter():
+        nonlocal count
+        count += 1
+        return count
+    
+    def reset():
+        nonlocal count
+        count = initial
+    
+    def get_count():
+        return count
+    
+    # Return multiple functions
+    counter.reset = reset
+    counter.get_count = get_count
+    return counter
+
+# Using closure with state
+my_counter = create_counter(10)
+print(my_counter())  # Output: 11
+print(my_counter())  # Output: 12
+print(my_counter.get_count())  # Output: 12
+my_counter.reset()
+print(my_counter())  # Output: 11
+
+# Partial functions
+from functools import partial
+
+def power(base, exponent):
+    return base ** exponent
+
+# Create specialized functions
+square = partial(power, exponent=2)
+cube = partial(power, exponent=3)
+
+print(square(5))  # Output: 25
+print(cube(3))    # Output: 27
+
+# Higher-order functions
+def apply_operation(operation, *args):
+    """Apply an operation to arguments."""
+    return operation(*args)
+
+def compose(*functions):
+    """Compose multiple functions."""
+    def composed(x):
+        for func in reversed(functions):
+            x = func(x)
+        return x
+    return composed
+
+# Using higher-order functions
+add_one = lambda x: x + 1
+multiply_by_two = lambda x: x * 2
+square_func = lambda x: x ** 2
+
+# Compose functions
+complex_operation = compose(square_func, multiply_by_two, add_one)
+result = complex_operation(3)  # ((3 + 1) * 2) ** 2 = 64
+print(result)  # Output: 64
+```
+
+**Practice Exercise - Advanced Features Integration:**
+
+```python
+import time
+import functools
+from contextlib import contextmanager
+from typing import Iterator, Callable, Any
+
+class AdvancedDataProcessor:
+    """Demonstrates integration of advanced Python features."""
+    
+    def __init__(self):
+        self._cache = {}
+        self._processing_stats = {"calls": 0, "cache_hits": 0}
+    
+    @contextmanager
+    def processing_timer(self, operation_name: str):
+        """Context manager for timing operations."""
+        start_time = time.time()
+        print(f"Starting {operation_name}...")
+        try:
+            yield
+        finally:
+            end_time = time.time()
+            print(f"{operation_name} completed in {end_time - start_time:.4f}s")
+    
+    def cache_results(self, func: Callable) -> Callable:
+        """Decorator to cache function results."""
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            # Create cache key
+            key = str(args) + str(sorted(kwargs.items()))
+            
+            self._processing_stats["calls"] += 1
+            
+            if key in self._cache:
+                self._processing_stats["cache_hits"] += 1
+                print(f"Cache hit for {func.__name__}")
+                return self._cache[key]
+            
+            result = func(*args, **kwargs)
+            self._cache[key] = result
+            return result
+        return wrapper
+    
+    def data_generator(self, data_source: list) -> Iterator[Any]:
+        """Generator for processing data items."""
+        for item in data_source:
+            # Simulate processing time
+            time.sleep(0.01)
+            yield self._transform_item(item)
+    
+    def _transform_item(self, item: Any) -> Any:
+        """Transform a single data item."""
+        if isinstance(item, (int, float)):
+            return item ** 2
+        elif isinstance(item, str):
+            return item.upper()
+        else:
+            return str(item)
+    
+    @cache_results
+    def expensive_calculation(self, n: int) -> int:
+        """Simulate an expensive calculation."""
+        time.sleep(0.1)  # Simulate work
+        return sum(i ** 2 for i in range(n))
+    
+    def process_data_pipeline(self, data: list) -> list:
+        """Process data using generator pipeline."""
+        # Generator pipeline
+        processed = self.data_generator(data)
+        filtered = (item for item in processed if self._should_include(item))
+        
+        return list(filtered)
+    
+    def _should_include(self, item: Any) -> bool:
+        """Filter criteria for processed items."""
+        if isinstance(item, (int, float)):
+            return item > 10
+        elif isinstance(item, str):
+            return len(item) > 3
+        return True
+    
+    def batch_process(self, data_batches: list) -> dict:
+        """Process multiple batches with timing and caching."""
+        results = {}
+        
+        for i, batch in enumerate(data_batches):
+            batch_name = f"batch_{i+1}"
+            
+            with self.processing_timer(f"Processing {batch_name}"):
+                # Use list comprehension with caching
+                batch_results = [
+                    self.expensive_calculation(item) 
+                    for item in batch 
+                    if isinstance(item, int) and item > 0
+                ]
+                
+                results[batch_name] = {
+                    "processed_items": len(batch_results),
+                    "total": sum(batch_results),
+                    "average": sum(batch_results) / len(batch_results) if batch_results else 0
+                }
+        
+        return results
+    
+    def get_stats(self) -> dict:
+        """Get processing statistics."""
+        hit_rate = (self._processing_stats["cache_hits"] / 
+                   self._processing_stats["calls"] * 100 
+                   if self._processing_stats["calls"] > 0 else 0)
+        
+        return {
+            "total_calls": self._processing_stats["calls"],
+            "cache_hits": self._processing_stats["cache_hits"],
+            "cache_hit_rate": f"{hit_rate:.1f}%",
+            "cached_results": len(self._cache)
+        }
+
+# Using the advanced data processor
+processor = AdvancedDataProcessor()
+
+# Test data
+test_data = [1, 2, 3, "hello", "world", 4.5, "python"]
+data_batches = [[1, 2, 3], [2, 3, 4], [1, 5, 6]]  # Some repeated values for cache testing
+
+print("=== Advanced Features Demo ===")
+
+# Test generator pipeline
+with processor.processing_timer("Data pipeline"):
+    pipeline_results = processor.process_data_pipeline(test_data)
+    print(f"Pipeline results: {pipeline_results}")
+
+# Test batch processing with caching
+batch_results = processor.batch_process(data_batches)
+print(f"\nBatch results: {batch_results}")
+
+# Show statistics
+stats = processor.get_stats()
+print(f"\nProcessing statistics: {stats}")
+```
+
+**Key Takeaways:**
+
+- Decorators modify function behavior and can be stacked for multiple effects
+- Generators provide memory-efficient iteration over large datasets
+- Context managers ensure proper resource management and cleanup
+- List comprehensions offer concise syntax for data transformation
+- Custom iterators provide fine-grained control over iteration behavior
+- Closures capture variables from enclosing scopes for stateful functions
+- Advanced features work together to create powerful, efficient programs
 
 ### File Handling
 
