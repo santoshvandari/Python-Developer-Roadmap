@@ -175,7 +175,7 @@ This guide is continuously improved based on community feedback. We welcome cont
 
 ## License
 
-This guide is open source and available under the MIT License. Feel free to use, modify, and share it for educational purposes.
+This guide is open source and available under the [MIT License](LICENSE). Feel free to use, modify, and share it for educational purposes.
 
 ---
 
