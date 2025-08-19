@@ -157,6 +157,9 @@ This guide is organized into progressive skill levels, each building upon the pr
 
 - **[Quick Reference](Roadmap/quick-reference.md)** - Syntax cheat sheet and common patterns
 - **[Learning Paths](Roadmap/learning-paths.md)** - Structured learning progression for different levels
+- **[FAQ](Roadmap/faq.md)** - Frequently asked questions and answers
+- **[Contributing](CONTRIBUTING.md)** - How to contribute to this guide
+- **[License](LICENSE)** - License information [MIT]
 
 ## Progress Tracking
 
