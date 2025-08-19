@@ -19,9 +19,7 @@ This guide provides structured content, practical code examples, syntax explanat
 This guide is organized into progressive skill levels, each building upon the previous one. Each section is now in its own file for better organization and easier navigation.
 
 **Getting Started**: If you're completely new to Python, start with the [Getting Started](Roadmap/01-getting-started.md) guide.
-
 **Learning Paths**: Check out our [Learning Paths](Roadmap/learning-paths.md) for structured progression based on your current level.
-
 **Quick Reference**: Use the [Quick Reference](Roadmap/quick-reference.md) for syntax and common patterns.
 
 ## Learning Roadmap

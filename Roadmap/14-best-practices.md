@@ -404,8 +404,8 @@ class TestUserServicePytest:
         # Act & Assert
         with pytest.raises(ValidationError, match="Invalid email format"):
             user_service.create_user(valid_user_data)
-```#
-# Version Control with Git
+```
+## Version Control with Git
 
 ### Git Best Practices
 
