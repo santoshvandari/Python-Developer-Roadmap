@@ -85,6 +85,7 @@ def log_calls(func):
 # Caching decorator
 def memoize(func):
     """Decorator to cache function results."""
+    
     cache = {}
     
     @functools.wraps(func)
