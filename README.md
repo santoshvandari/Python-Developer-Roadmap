@@ -3205,67 +3205,1232 @@ print(f"\nProcessing statistics: {stats}")
 
 ### File Handling
 
-**Reading and Writing Files:**
+File handling is essential for reading data, storing results, and working with external resources. Python provides comprehensive tools for working with various file formats.
+
+#### Reading and Writing Files
+
+**Basic File Operations:**
 
 ```python
 # Writing to a file
 with open("example.txt", "w") as file:
     file.write("Hello, World!\n")
-    file.write("Python is awesome!")
+    file.write("Python is awesome!\n")
+    file.write("File handling is important.")
 
-# Reading from a file
+# Reading entire file
 with open("example.txt", "r") as file:
     content = file.read()
+    print("Full content:")
     print(content)
 
-# Working with CSV files
-import csv
+# Reading line by line
+with open("example.txt", "r") as file:
+    print("\nLine by line:")
+    for line_number, line in enumerate(file, 1):
+        print(f"Line {line_number}: {line.strip()}")
 
-data = [["Name", "Age"], ["Alice", 30], ["Bob", 25]]
-with open("people.csv", "w", newline="") as file:
-    writer = csv.writer(file)
-    writer.writerows(data)
+# Reading all lines into a list
+with open("example.txt", "r") as file:
+    lines = file.readlines()
+    print(f"\nTotal lines: {len(lines)}")
+    print("Lines as list:", [line.strip() for line in lines])
 ```
+
+**Different File Modes:**
+
+```python
+# File modes demonstration
+modes_demo = {
+    'w': 'Write mode - overwrites existing file',
+    'a': 'Append mode - adds to end of file',
+    'r': 'Read mode - read only',
+    'x': 'Exclusive creation - fails if file exists',
+    'b': 'Binary mode - for binary files',
+    't': 'Text mode - default for text files',
+    '+': 'Read and write mode'
+}
+
+# Append to file
+with open("example.txt", "a") as file:
+    file.write("\nThis line was appended.")
+
+# Read and write mode
+with open("example.txt", "r+") as file:
+    content = file.read()
+    file.write("\nAdded in r+ mode")
+
+# Working with file positions
+with open("example.txt", "r") as file:
+    print(f"Current position: {file.tell()}")
+    first_line = file.readline()
+    print(f"After reading first line: {file.tell()}")
+    file.seek(0)  # Go back to beginning
+    print(f"After seek(0): {file.tell()}")
+```
+
+**Error Handling with Files:**
+
+```python
+def safe_file_operations(filename):
+    """Demonstrate safe file operations with error handling."""
+    
+    # Reading with error handling
+    try:
+        with open(filename, 'r') as file:
+            content = file.read()
+            return content
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found")
+        return None
+    except PermissionError:
+        print(f"Error: Permission denied to read '{filename}'")
+        return None
+    except Exception as e:
+        print(f"Unexpected error reading '{filename}': {e}")
+        return None
+
+# Writing with error handling
+def safe_write_file(filename, content):
+    """Safely write content to file."""
+    try:
+        with open(filename, 'w') as file:
+            file.write(content)
+        print(f"Successfully wrote to '{filename}'")
+        return True
+    except PermissionError:
+        print(f"Error: Permission denied to write '{filename}'")
+        return False
+    except Exception as e:
+        print(f"Unexpected error writing '{filename}': {e}")
+        return False
+
+# Test safe operations
+content = safe_file_operations("example.txt")
+if content:
+    print("File content retrieved successfully")
+
+safe_write_file("test_output.txt", "This is a test file.")
+```
+
+#### Working with CSV Files
+
+**Basic CSV Operations:**
+
+```python
+import csv
+from datetime import datetime
+
+# Writing CSV files
+def create_employee_csv():
+    """Create a CSV file with employee data."""
+    employees = [
+        ["Name", "Age", "Department", "Salary", "Start Date"],
+        ["Alice Johnson", 30, "Engineering", 75000, "2022-01-15"],
+        ["Bob Smith", 25, "Marketing", 55000, "2022-03-01"],
+        ["Charlie Brown", 35, "Engineering", 85000, "2021-06-10"],
+        ["Diana Prince", 28, "HR", 60000, "2022-02-20"],
+        ["Eve Wilson", 32, "Finance", 70000, "2021-11-05"]
+    ]
+    
+    with open("employees.csv", "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerows(employees)
+    
+    print("Employee CSV file created successfully")
+
+# Reading CSV files
+def read_employee_csv():
+    """Read and process employee CSV data."""
+    try:
+        with open("employees.csv", "r", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            headers = next(reader)  # Get headers
+            
+            print("Employee Data:")
+            print("-" * 60)
+            
+            employees = []
+            for row in reader:
+                employee = dict(zip(headers, row))
+                employees.append(employee)
+                print(f"{employee['Name']:<15} | {employee['Department']:<12} | ${employee['Salary']}")
+            
+            return employees
+    
+    except FileNotFoundError:
+        print("Employee CSV file not found")
+        return []
+
+# Using DictReader and DictWriter
+def advanced_csv_operations():
+    """Demonstrate advanced CSV operations."""
+    
+    # Reading with DictReader
+    try:
+        with open("employees.csv", "r") as file:
+            reader = csv.DictReader(file)
+            
+            # Filter and process data
+            engineering_employees = []
+            for row in reader:
+                if row["Department"] == "Engineering":
+                    engineering_employees.append(row)
+            
+            print(f"\nEngineering Department ({len(engineering_employees)} employees):")
+            for emp in engineering_employees:
+                print(f"  {emp['Name']} - ${emp['Salary']}")
+    
+    except FileNotFoundError:
+        print("CSV file not found")
+        return
+    
+    # Writing with DictWriter
+    summary_data = [
+        {"Department": "Engineering", "Count": 2, "Avg_Salary": 80000},
+        {"Department": "Marketing", "Count": 1, "Avg_Salary": 55000},
+        {"Department": "HR", "Count": 1, "Avg_Salary": 60000},
+        {"Department": "Finance", "Count": 1, "Avg_Salary": 70000}
+    ]
+    
+    with open("department_summary.csv", "w", newline="") as file:
+        fieldnames = ["Department", "Count", "Avg_Salary"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        writer.writerows(summary_data)
+    
+    print("Department summary CSV created")
+
+# Run CSV operations
+create_employee_csv()
+employees = read_employee_csv()
+advanced_csv_operations()
+```
+
+#### JSON File Operations
+
+**Working with JSON Data:**
+
+```python
+import json
+from datetime import datetime, date
+
+# Custom JSON encoder for dates
+class DateTimeEncoder(json.JSONEncoder):
+    """Custom JSON encoder for datetime objects."""
+    
+    def default(self, obj):
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        return super().default(obj)
+
+# Writing JSON files
+def create_json_data():
+    """Create and write JSON data."""
+    
+    # Complex data structure
+    company_data = {
+        "company": {
+            "name": "Tech Solutions Inc.",
+            "founded": date(2020, 1, 15),
+            "employees": [
+                {
+                    "id": 1,
+                    "name": "Alice Johnson",
+                    "position": "Senior Developer",
+                    "skills": ["Python", "JavaScript", "SQL"],
+                    "hire_date": date(2022, 1, 15),
+                    "salary": 75000,
+                    "active": True
+                },
+                {
+                    "id": 2,
+                    "name": "Bob Smith",
+                    "position": "Marketing Manager",
+                    "skills": ["Marketing", "Analytics", "Communication"],
+                    "hire_date": date(2022, 3, 1),
+                    "salary": 55000,
+                    "active": True
+                }
+            ],
+            "departments": {
+                "engineering": {"budget": 500000, "head": "Alice Johnson"},
+                "marketing": {"budget": 200000, "head": "Bob Smith"}
+            }
+        }
+    }
+    
+    # Write JSON with custom encoder
+    with open("company_data.json", "w") as file:
+        json.dump(company_data, file, cls=DateTimeEncoder, indent=2)
+    
+    print("Company JSON data created")
+    return company_data
+
+# Reading JSON files
+def read_json_data():
+    """Read and process JSON data."""
+    try:
+        with open("company_data.json", "r") as file:
+            data = json.load(file)
+        
+        company = data["company"]
+        print(f"Company: {company['name']}")
+        print(f"Founded: {company['founded']}")
+        print(f"Employees: {len(company['employees'])}")
+        
+        # Process employee data
+        print("\nEmployee Details:")
+        for emp in company["employees"]:
+            skills_str = ", ".join(emp["skills"])
+            print(f"  {emp['name']} - {emp['position']}")
+            print(f"    Skills: {skills_str}")
+            print(f"    Salary: ${emp['salary']:,}")
+        
+        return data
+    
+    except FileNotFoundError:
+        print("JSON file not found")
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON: {e}")
+        return None
+
+# JSON manipulation
+def update_json_data():
+    """Update existing JSON data."""
+    data = read_json_data()
+    if not data:
+        return
+    
+    # Add new employee
+    new_employee = {
+        "id": 3,
+        "name": "Charlie Brown",
+        "position": "Data Analyst",
+        "skills": ["Python", "SQL", "Statistics"],
+        "hire_date": "2023-01-10",
+        "salary": 65000,
+        "active": True
+    }
+    
+    data["company"]["employees"].append(new_employee)
+    
+    # Update department budget
+    data["company"]["departments"]["engineering"]["budget"] = 600000
+    
+    # Write updated data
+    with open("company_data_updated.json", "w") as file:
+        json.dump(data, file, indent=2)
+    
+    print("JSON data updated and saved")
+
+# Run JSON operations
+original_data = create_json_data()
+read_data = read_json_data()
+update_json_data()
+```
+
+#### File Paths with Pathlib
+
+**Modern Path Handling:**
+
+```python
+from pathlib import Path
+import os
+import shutil
+from datetime import datetime
+
+# Creating Path objects
+def pathlib_basics():
+    """Demonstrate basic pathlib operations."""
+    
+    # Current working directory
+    current_dir = Path.cwd()
+    print(f"Current directory: {current_dir}")
+    
+    # Home directory
+    home_dir = Path.home()
+    print(f"Home directory: {home_dir}")
+    
+    # Creating paths
+    data_dir = Path("data")
+    file_path = data_dir / "example.txt"
+    
+    print(f"Data directory: {data_dir}")
+    print(f"File path: {file_path}")
+    
+    # Path properties
+    if file_path.exists():
+        print(f"File name: {file_path.name}")
+        print(f"File stem: {file_path.stem}")
+        print(f"File suffix: {file_path.suffix}")
+        print(f"Parent directory: {file_path.parent}")
+        print(f"Absolute path: {file_path.absolute()}")
+
+# File system operations with pathlib
+def pathlib_file_operations():
+    """Demonstrate file operations with pathlib."""
+    
+    # Create directory structure
+    project_dir = Path("my_project")
+    src_dir = project_dir / "src"
+    data_dir = project_dir / "data"
+    docs_dir = project_dir / "docs"
+    
+    # Create directories
+    for directory in [src_dir, data_dir, docs_dir]:
+        directory.mkdir(parents=True, exist_ok=True)
+        print(f"Created directory: {directory}")
+    
+    # Create files
+    files_to_create = [
+        (src_dir / "main.py", "# Main application file\nprint('Hello, World!')"),
+        (src_dir / "utils.py", "# Utility functions\ndef helper():\n    pass"),
+        (data_dir / "sample.txt", "Sample data file\nLine 2\nLine 3"),
+        (docs_dir / "README.md", "# My Project\nThis is a sample project.")
+    ]
+    
+    for file_path, content in files_to_create:
+        file_path.write_text(content)
+        print(f"Created file: {file_path}")
+    
+    return project_dir
+
+# Directory traversal and file searching
+def explore_directory_structure(root_path):
+    """Explore directory structure using pathlib."""
+    
+    root = Path(root_path)
+    if not root.exists():
+        print(f"Directory {root_path} does not exist")
+        return
+    
+    print(f"\nExploring directory: {root}")
+    print("=" * 50)
+    
+    # Recursive directory listing
+    for item in root.rglob("*"):
+        indent = "  " * (len(item.parts) - len(root.parts))
+        if item.is_file():
+            size = item.stat().st_size
+            modified = datetime.fromtimestamp(item.stat().st_mtime)
+            print(f"{indent}📄 {item.name} ({size} bytes, modified: {modified.strftime('%Y-%m-%d %H:%M')})")
+        elif item.is_dir():
+            print(f"{indent}📁 {item.name}/")
+    
+    # Find specific file types
+    print(f"\nPython files in {root}:")
+    for py_file in root.rglob("*.py"):
+        print(f"  {py_file}")
+    
+    print(f"\nText files in {root}:")
+    for txt_file in root.rglob("*.txt"):
+        print(f"  {txt_file}")
+
+# File operations and utilities
+def file_utilities():
+    """Demonstrate various file utilities."""
+    
+    # File information
+    def get_file_info(file_path):
+        """Get detailed file information."""
+        path = Path(file_path)
+        if not path.exists():
+            return f"File {file_path} does not exist"
+        
+        stat = path.stat()
+        info = {
+            "name": path.name,
+            "size": stat.st_size,
+            "created": datetime.fromtimestamp(stat.st_ctime),
+            "modified": datetime.fromtimestamp(stat.st_mtime),
+            "is_file": path.is_file(),
+            "is_directory": path.is_dir(),
+            "absolute_path": path.absolute()
+        }
+        return info
+    
+    # Copy files
+    def copy_file_with_backup(source, destination):
+        """Copy file with backup if destination exists."""
+        src = Path(source)
+        dst = Path(destination)
+        
+        if not src.exists():
+            return f"Source file {source} does not exist"
+        
+        if dst.exists():
+            backup_name = f"{dst.stem}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}{dst.suffix}"
+            backup_path = dst.parent / backup_name
+            shutil.copy2(dst, backup_path)
+            print(f"Created backup: {backup_path}")
+        
+        shutil.copy2(src, dst)
+        return f"Copied {source} to {destination}"
+    
+    # Example usage
+    project_dir = Path("my_project")
+    if project_dir.exists():
+        sample_file = project_dir / "data" / "sample.txt"
+        if sample_file.exists():
+            info = get_file_info(sample_file)
+            print("File information:")
+            for key, value in info.items():
+                print(f"  {key}: {value}")
+            
+            # Copy with backup
+            backup_result = copy_file_with_backup(
+                sample_file, 
+                project_dir / "data" / "sample_copy.txt"
+            )
+            print(backup_result)
+
+# Run pathlib demonstrations
+pathlib_basics()
+project_dir = pathlib_file_operations()
+explore_directory_structure(project_dir)
+file_utilities()
+```
+
+#### Binary Files
+
+**Working with Binary Data:**
+
+```python
+import struct
+import pickle
+
+# Reading and writing binary files
+def binary_file_operations():
+    """Demonstrate binary file operations."""
+    
+    # Writing binary data
+    binary_data = b"Hello, binary world!\x00\x01\x02\x03"
+    
+    with open("binary_example.bin", "wb") as file:
+        file.write(binary_data)
+    
+    print("Binary data written")
+    
+    # Reading binary data
+    with open("binary_example.bin", "rb") as file:
+        read_data = file.read()
+        print(f"Read binary data: {read_data}")
+        print(f"As hex: {read_data.hex()}")
+
+# Working with structured binary data
+def structured_binary_data():
+    """Work with structured binary data using struct module."""
+    
+    # Pack data into binary format
+    # Format: int (4 bytes), float (4 bytes), string (10 bytes)
+    data_to_pack = [
+        (1, 3.14, b"Alice     "),
+        (2, 2.71, b"Bob       "),
+        (3, 1.41, b"Charlie   ")
+    ]
+    
+    with open("structured_data.bin", "wb") as file:
+        for record in data_to_pack:
+            # 'I' = unsigned int, 'f' = float, '10s' = 10-byte string
+            packed_data = struct.pack('If10s', *record)
+            file.write(packed_data)
+    
+    print("Structured binary data written")
+    
+    # Read structured binary data
+    with open("structured_data.bin", "rb") as file:
+        print("Reading structured data:")
+        record_size = struct.calcsize('If10s')
+        
+        while True:
+            data = file.read(record_size)
+            if not data:
+                break
+            
+            unpacked = struct.unpack('If10s', data)
+            id_num, value, name = unpacked
+            name_str = name.decode('utf-8').strip()
+            print(f"ID: {id_num}, Value: {value:.2f}, Name: {name_str}")
+
+# Object serialization with pickle
+def pickle_operations():
+    """Demonstrate object serialization with pickle."""
+    
+    # Complex data structure
+    data_to_serialize = {
+        "users": [
+            {"id": 1, "name": "Alice", "scores": [95, 87, 92]},
+            {"id": 2, "name": "Bob", "scores": [88, 91, 85]}
+        ],
+        "metadata": {
+            "created": "2024-01-01",
+            "version": 1.0,
+            "settings": {"theme": "dark", "language": "en"}
+        }
+    }
+    
+    # Serialize to file
+    with open("data.pickle", "wb") as file:
+        pickle.dump(data_to_serialize, file)
+    
+    print("Data serialized with pickle")
+    
+    # Deserialize from file
+    with open("data.pickle", "rb") as file:
+        loaded_data = pickle.load(file)
+    
+    print("Loaded data:")
+    print(f"Users: {len(loaded_data['users'])}")
+    for user in loaded_data["users"]:
+        avg_score = sum(user["scores"]) / len(user["scores"])
+        print(f"  {user['name']}: Average score {avg_score:.1f}")
+
+# Run binary file demonstrations
+binary_file_operations()
+structured_binary_data()
+pickle_operations()
+```
+
+#### File System Operations
+
+**Advanced File System Operations:**
+
+```python
+import os
+import shutil
+import glob
+from pathlib import Path
+import tempfile
+
+def file_system_operations():
+    """Demonstrate comprehensive file system operations."""
+    
+    # Create temporary directory for demonstrations
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        print(f"Working in temporary directory: {temp_path}")
+        
+        # Create directory structure
+        dirs_to_create = [
+            "projects/web_app/src",
+            "projects/web_app/tests",
+            "projects/data_analysis/notebooks",
+            "projects/data_analysis/data",
+            "backup",
+            "archive"
+        ]
+        
+        for dir_path in dirs_to_create:
+            (temp_path / dir_path).mkdir(parents=True, exist_ok=True)
+        
+        # Create sample files
+        files_to_create = [
+            ("projects/web_app/src/app.py", "# Web application\nprint('Hello, Web!')"),
+            ("projects/web_app/src/utils.py", "# Utilities\ndef helper(): pass"),
+            ("projects/web_app/tests/test_app.py", "# Tests\ndef test_app(): pass"),
+            ("projects/data_analysis/notebooks/analysis.ipynb", '{"cells": []}'),
+            ("projects/data_analysis/data/dataset.csv", "name,age\nAlice,30\nBob,25"),
+            ("README.md", "# Project Repository\nThis is a sample repository."),
+            ("requirements.txt", "flask==2.0.1\npandas==1.3.0")
+        ]
+        
+        for file_path, content in files_to_create:
+            full_path = temp_path / file_path
+            full_path.write_text(content)
+        
+        print("Created directory structure and files")
+        
+        # File searching with glob patterns
+        print("\nSearching for files:")
+        
+        # Find all Python files
+        python_files = list(temp_path.rglob("*.py"))
+        print(f"Python files: {len(python_files)}")
+        for py_file in python_files:
+            print(f"  {py_file.relative_to(temp_path)}")
+        
+        # Find files in specific directory
+        web_app_files = list((temp_path / "projects/web_app").rglob("*"))
+        print(f"\nWeb app files: {len([f for f in web_app_files if f.is_file()])}")
+        
+        # Copy operations
+        print("\nFile operations:")
+        
+        # Copy single file
+        src_file = temp_path / "projects/web_app/src/app.py"
+        backup_file = temp_path / "backup/app_backup.py"
+        shutil.copy2(src_file, backup_file)
+        print(f"Copied {src_file.name} to backup")
+        
+        # Copy entire directory
+        src_dir = temp_path / "projects/web_app"
+        archive_dir = temp_path / "archive/web_app_archive"
+        shutil.copytree(src_dir, archive_dir)
+        print(f"Copied entire web_app directory to archive")
+        
+        # Move operations
+        old_path = temp_path / "requirements.txt"
+        new_path = temp_path / "projects/requirements.txt"
+        shutil.move(str(old_path), str(new_path))
+        print(f"Moved requirements.txt to projects directory")
+        
+        # Directory size calculation
+        def get_directory_size(path):
+            """Calculate total size of directory."""
+            total_size = 0
+            for file_path in path.rglob("*"):
+                if file_path.is_file():
+                    total_size += file_path.stat().st_size
+            return total_size
+        
+        projects_size = get_directory_size(temp_path / "projects")
+        print(f"\nProjects directory size: {projects_size} bytes")
+        
+        # File filtering and processing
+        def process_python_files(root_path):
+            """Process all Python files in directory."""
+            python_files = list(root_path.rglob("*.py"))
+            
+            stats = {
+                "total_files": len(python_files),
+                "total_lines": 0,
+                "files_with_imports": 0
+            }
+            
+            for py_file in python_files:
+                try:
+                    content = py_file.read_text()
+                    lines = content.split('\n')
+                    stats["total_lines"] += len(lines)
+                    
+                    if any(line.strip().startswith(('import ', 'from ')) for line in lines):
+                        stats["files_with_imports"] += 1
+                
+                except Exception as e:
+                    print(f"Error processing {py_file}: {e}")
+            
+            return stats
+        
+        py_stats = process_python_files(temp_path)
+        print(f"\nPython files statistics:")
+        for key, value in py_stats.items():
+            print(f"  {key}: {value}")
+
+# File monitoring and watching (conceptual example)
+def file_monitoring_example():
+    """Example of file monitoring concepts."""
+    
+    def monitor_directory_changes(directory_path, duration=5):
+        """Monitor directory for changes (simplified example)."""
+        path = Path(directory_path)
+        if not path.exists():
+            print(f"Directory {directory_path} does not exist")
+            return
+        
+        print(f"Monitoring {directory_path} for {duration} seconds...")
+        
+        # Get initial state
+        initial_files = {f: f.stat().st_mtime for f in path.rglob("*") if f.is_file()}
+        
+        import time
+        time.sleep(duration)
+        
+        # Check for changes
+        current_files = {f: f.stat().st_mtime for f in path.rglob("*") if f.is_file()}
+        
+        # Find new files
+        new_files = set(current_files.keys()) - set(initial_files.keys())
+        if new_files:
+            print("New files detected:")
+            for file_path in new_files:
+                print(f"  + {file_path}")
+        
+        # Find modified files
+        modified_files = []
+        for file_path, mtime in current_files.items():
+            if file_path in initial_files and initial_files[file_path] != mtime:
+                modified_files.append(file_path)
+        
+        if modified_files:
+            print("Modified files:")
+            for file_path in modified_files:
+                print(f"  ~ {file_path}")
+        
+        # Find deleted files
+        deleted_files = set(initial_files.keys()) - set(current_files.keys())
+        if deleted_files:
+            print("Deleted files:")
+            for file_path in deleted_files:
+                print(f"  - {file_path}")
+        
+        if not (new_files or modified_files or deleted_files):
+            print("No changes detected")
+
+# Run file system operations
+file_system_operations()
+
+print("\n" + "="*50)
+print("File monitoring example (create/modify files in current directory):")
+# monitor_directory_changes(".", 10)  # Uncomment to test monitoring
+```
+
+**Key Takeaways:**
+
+- Always use context managers (`with` statement) for file operations
+- Handle file-related exceptions appropriately
+- Use pathlib for modern, cross-platform path handling
+- CSV and JSON modules provide robust data file handling
+- Binary files require special handling with struct and pickle
+- File system operations should be performed carefully with proper error handling
+- Consider using temporary directories for testing and intermediate files
 
 ## Professional Level
 
 ### Popular Libraries
 
-**NumPy for Numerical Computing:**
+#### NumPy for Numerical Computing
+
+NumPy is the foundation of scientific computing in Python, providing powerful array operations and mathematical functions.
+
+**Array Creation and Basic Operations:**
 
 ```python
 import numpy as np
 
 # Creating arrays
-arr = np.array([1, 2, 3, 4, 5])
-matrix = np.array([[1, 2], [3, 4]])
+arr1d = np.array([1, 2, 3, 4, 5])
+arr2d = np.array([[1, 2, 3], [4, 5, 6]])
+zeros = np.zeros((3, 4))
+ones = np.ones((2, 3))
+range_arr = np.arange(0, 10, 2)  # [0, 2, 4, 6, 8]
+linspace = np.linspace(0, 1, 5)  # [0, 0.25, 0.5, 0.75, 1]
 
-# Mathematical operations
-print(arr * 2)  # [2 4 6 8 10]
-print(np.mean(arr))  # 3.0
+print(f"1D array: {arr1d}")
+print(f"2D array:\n{arr2d}")
+print(f"Array shape: {arr2d.shape}")
+print(f"Array dtype: {arr1d.dtype}")
+
+# Array operations
+print(f"Sum: {np.sum(arr1d)}")
+print(f"Mean: {np.mean(arr1d)}")
+print(f"Standard deviation: {np.std(arr1d)}")
+print(f"Max: {np.max(arr1d)}")
+print(f"Min: {np.min(arr1d)}")
 ```
 
-**Pandas for Data Manipulation:**
+**Array Manipulation and Mathematical Operations:**
+
+```python
+# Mathematical operations
+a = np.array([1, 2, 3, 4])
+b = np.array([5, 6, 7, 8])
+
+print(f"Addition: {a + b}")
+print(f"Multiplication: {a * b}")
+print(f"Power: {a ** 2}")
+print(f"Square root: {np.sqrt(a)}")
+
+# Matrix operations
+matrix_a = np.array([[1, 2], [3, 4]])
+matrix_b = np.array([[5, 6], [7, 8]])
+
+print(f"Matrix multiplication:\n{np.dot(matrix_a, matrix_b)}")
+print(f"Element-wise multiplication:\n{matrix_a * matrix_b}")
+
+# Array indexing and slicing
+data = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]])
+print(f"Element at [1,2]: {data[1, 2]}")
+print(f"First row: {data[0, :]}")
+print(f"Last column: {data[:, -1]}")
+print(f"Subarray:\n{data[1:, 1:3]}")
+
+# Boolean indexing
+numbers = np.array([1, 5, 3, 8, 2, 9, 4])
+mask = numbers > 4
+print(f"Numbers > 4: {numbers[mask]}")
+```
+
+#### Pandas for Data Manipulation
+
+Pandas provides powerful data structures and analysis tools for working with structured data.
+
+**DataFrames and Series:**
 
 ```python
 import pandas as pd
+import numpy as np
 
-# Creating a DataFrame
-data = {"Name": ["Alice", "Bob"], "Age": [30, 25]}
+# Creating DataFrames
+data = {
+    "Name": ["Alice", "Bob", "Charlie", "Diana", "Eve"],
+    "Age": [25, 30, 35, 28, 32],
+    "City": ["New York", "London", "Tokyo", "Paris", "Sydney"],
+    "Salary": [70000, 80000, 90000, 75000, 85000]
+}
+
 df = pd.DataFrame(data)
+print("DataFrame:")
 print(df)
+print(f"\nDataFrame info:")
+print(df.info())
+
+# Basic operations
+print(f"\nFirst 3 rows:")
+print(df.head(3))
+print(f"\nDescriptive statistics:")
+print(df.describe())
+
+# Selecting data
+print(f"\nNames column:")
+print(df["Name"])
+print(f"\nMultiple columns:")
+print(df[["Name", "Salary"]])
+print(f"\nRows where Age > 30:")
+print(df[df["Age"] > 30])
 ```
 
-**Requests for HTTP Operations:**
+**Data Analysis and Manipulation:**
+
+```python
+# Adding new columns
+df["Salary_USD"] = df["Salary"]
+df["Age_Group"] = df["Age"].apply(lambda x: "Young" if x < 30 else "Experienced")
+df["Bonus"] = df["Salary"] * 0.1
+
+print("DataFrame with new columns:")
+print(df)
+
+# Grouping and aggregation
+age_groups = df.groupby("Age_Group").agg({
+    "Salary": ["mean", "min", "max"],
+    "Age": "mean"
+})
+print(f"\nGrouped data:")
+print(age_groups)
+
+# Sorting
+sorted_df = df.sort_values("Salary", ascending=False)
+print(f"\nSorted by salary (descending):")
+print(sorted_df[["Name", "Salary"]])
+
+# Working with missing data
+df_with_na = df.copy()
+df_with_na.loc[2, "Salary"] = np.nan
+df_with_na.loc[4, "City"] = np.nan
+
+print(f"\nDataFrame with missing values:")
+print(df_with_na)
+print(f"\nMissing values count:")
+print(df_with_na.isnull().sum())
+
+# Fill missing values
+df_filled = df_with_na.fillna({
+    "Salary": df_with_na["Salary"].mean(),
+    "City": "Unknown"
+})
+print(f"\nDataFrame with filled values:")
+print(df_filled)
+```
+
+#### Requests for HTTP Operations
+
+The requests library simplifies HTTP operations for web APIs and web scraping.
+
+**Basic HTTP Requests:**
 
 ```python
 import requests
+import json
 
-response = requests.get("https://api.github.com/users/octocat")
-if response.status_code == 200:
-    data = response.json()
-    print(data["name"])
+# GET request
+def make_get_request():
+    """Demonstrate GET requests."""
+    try:
+        # Simple GET request
+        response = requests.get("https://httpbin.org/get")
+        print(f"Status code: {response.status_code}")
+        print(f"Response headers: {dict(response.headers)}")
+        
+        # GET with parameters
+        params = {"key1": "value1", "key2": "value2"}
+        response = requests.get("https://httpbin.org/get", params=params)
+        data = response.json()
+        print(f"URL with params: {data['url']}")
+        
+        return response.status_code == 200
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        return False
+
+# POST request
+def make_post_request():
+    """Demonstrate POST requests."""
+    try:
+        # POST with JSON data
+        post_data = {
+            "name": "Alice",
+            "age": 30,
+            "city": "New York"
+        }
+        
+        response = requests.post(
+            "https://httpbin.org/post",
+            json=post_data,
+            headers={"Content-Type": "application/json"}
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            print("POST request successful")
+            print(f"Sent data: {result['json']}")
+            return True
+        else:
+            print(f"POST failed with status: {response.status_code}")
+            return False
+    
+    except requests.exceptions.RequestException as e:
+        print(f"POST request failed: {e}")
+        return False
+
+# Working with APIs
+def work_with_api():
+    """Demonstrate working with a real API."""
+    try:
+        # GitHub API example
+        username = "octocat"
+        url = f"https://api.github.com/users/{username}"
+        
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            print(f"GitHub user: {user_data['name']}")
+            print(f"Public repos: {user_data['public_repos']}")
+            print(f"Followers: {user_data['followers']}")
+            print(f"Created: {user_data['created_at']}")
+        else:
+            print(f"Failed to fetch user data: {response.status_code}")
+    
+    except requests.exceptions.RequestException as e:
+        print(f"API request failed: {e}")
+
+# Session management
+def session_example():
+    """Demonstrate session management."""
+    session = requests.Session()
+    
+    # Set default headers for all requests in this session
+    session.headers.update({"User-Agent": "Python-Requests-Example"})
+    
+    try:
+        # Multiple requests using the same session
+        response1 = session.get("https://httpbin.org/get")
+        response2 = session.get("https://httpbin.org/headers")
+        
+        print("Session requests completed")
+        print(f"User-Agent in headers: {response2.json()['headers']['User-Agent']}")
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Session request failed: {e}")
+    finally:
+        session.close()
+
+# Run HTTP examples
+print("=== HTTP Requests Examples ===")
+make_get_request()
+make_post_request()
+work_with_api()
+session_example()
 ```
+
+#### Matplotlib for Data Visualization
+
+Matplotlib is the primary plotting library for creating static, animated, and interactive visualizations.
+
+**Basic Plotting:**
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Simple line plot
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='sin(x)')
+plt.plot(x, np.cos(x), label='cos(x)')
+plt.xlabel('X values')
+plt.ylabel('Y values')
+plt.title('Sine and Cosine Functions')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Multiple subplots
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+
+# Subplot 1: Line plot
+axes[0, 0].plot(x, y)
+axes[0, 0].set_title('Line Plot')
+
+# Subplot 2: Scatter plot
+axes[0, 1].scatter(np.random.randn(50), np.random.randn(50))
+axes[0, 1].set_title('Scatter Plot')
+
+# Subplot 3: Bar plot
+categories = ['A', 'B', 'C', 'D']
+values = [23, 45, 56, 78]
+axes[1, 0].bar(categories, values)
+axes[1, 0].set_title('Bar Plot')
+
+# Subplot 4: Histogram
+data = np.random.normal(0, 1, 1000)
+axes[1, 1].hist(data, bins=30)
+axes[1, 1].set_title('Histogram')
+
+plt.tight_layout()
+plt.show()
+```
+
+#### Web Frameworks
+
+**Flask - Lightweight Web Framework:**
+
+```python
+# Basic Flask application
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Sample data
+users = [
+    {"id": 1, "name": "Alice", "email": "alice@example.com"},
+    {"id": 2, "name": "Bob", "email": "bob@example.com"}
+]
+
+@app.route('/')
+def home():
+    return "Welcome to the Flask API!"
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    return jsonify(users)
+
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = next((u for u in users if u["id"] == user_id), None)
+    if user:
+        return jsonify(user)
+    return jsonify({"error": "User not found"}), 404
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    new_user = {
+        "id": len(users) + 1,
+        "name": data.get("name"),
+        "email": data.get("email")
+    }
+    users.append(new_user)
+    return jsonify(new_user), 201
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+#### Database Connectivity
+
+**SQLite Database Operations:**
+
+```python
+import sqlite3
+import pandas as pd
+from datetime import datetime
+
+def database_operations():
+    """Demonstrate database operations with SQLite."""
+    
+    # Connect to database (creates if doesn't exist)
+    conn = sqlite3.connect('example.db')
+    cursor = conn.cursor()
+    
+    try:
+        # Create table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS employees (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                department TEXT NOT NULL,
+                salary REAL NOT NULL,
+                hire_date TEXT NOT NULL
+            )
+        ''')
+        
+        # Insert data
+        employees_data = [
+            ("Alice Johnson", "Engineering", 75000, "2022-01-15"),
+            ("Bob Smith", "Marketing", 55000, "2022-03-01"),
+            ("Charlie Brown", "Engineering", 85000, "2021-06-10"),
+            ("Diana Prince", "HR", 60000, "2022-02-20")
+        ]
+        
+        cursor.executemany(
+            "INSERT INTO employees (name, department, salary, hire_date) VALUES (?, ?, ?, ?)",
+            employees_data
+        )
+        
+        # Query data
+        cursor.execute("SELECT * FROM employees WHERE department = ?", ("Engineering",))
+        engineering_employees = cursor.fetchall()
+        
+        print("Engineering employees:")
+        for emp in engineering_employees:
+            print(f"  {emp[1]} - ${emp[3]:,}")
+        
+        # Using pandas with SQLite
+        df = pd.read_sql_query("SELECT * FROM employees", conn)
+        print(f"\nAll employees DataFrame:")
+        print(df)
+        
+        # Aggregate queries
+        cursor.execute("""
+            SELECT department, COUNT(*) as count, AVG(salary) as avg_salary
+            FROM employees
+            GROUP BY department
+        """)
+        
+        dept_stats = cursor.fetchall()
+        print(f"\nDepartment statistics:")
+        for dept, count, avg_sal in dept_stats:
+            print(f"  {dept}: {count} employees, avg salary: ${avg_sal:,.2f}")
+        
+        conn.commit()
+        
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        conn.rollback()
+    
+    finally:
+        conn.close()
+
+# Run database operations
+database_operations()
+```
+
+**Key Takeaways:**
+
+- NumPy provides efficient array operations and mathematical functions
+- Pandas excels at data manipulation and analysis with DataFrames
+- Requests simplifies HTTP operations and API interactions
+- Matplotlib creates comprehensive data visualizations
+- Flask enables rapid web application development
+- SQLite provides lightweight database functionality
+- These libraries form the foundation of most Python data science and web development projects
 
 ### Best Practices
 

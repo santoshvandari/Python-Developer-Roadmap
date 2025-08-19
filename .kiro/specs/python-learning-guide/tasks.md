@@ -101,7 +101,7 @@
   - Implement advanced function features (args, kwargs, closures)
   - _Requirements: 3.2, 3.4_
 
-- [-] 12. Build Advanced Level - File Handling section
+- [x] 12. Build Advanced Level - File Handling section
 
   - Write file reading and writing with different modes
   - Implement CSV file handling with csv module
@@ -111,7 +111,7 @@
   - Implement file system operations (creating, deleting, moving files)
   - _Requirements: 3.3, 3.4_
 
-- [ ] 13. Build Professional Level - Popular Libraries section
+- [x] 13. Build Professional Level - Popular Libraries section
 
   - Write NumPy section with array operations and mathematical functions
   - Implement Pandas section with DataFrames and data manipulation
@@ -121,7 +121,7 @@
   - Implement database connectivity examples (SQLite, PostgreSQL)
   - _Requirements: 4.1, 4.4_
 
-- [ ] 14. Build Professional Level - Best Practices section
+- [-] 14. Build Professional Level - Best Practices section
 
   - Write PEP 8 style guide with code formatting examples
   - Implement code organization and project structure
