@@ -53,6 +53,11 @@ Each learning section will contain:
 README.md
 ├── Header (Title, Description, Table of Contents)
 ├── Getting Started
+│   ├── Introduction
+|   |   ├── Why Python?
+│   |   ├── Python History
+│   |   └── Python for Beginners
+│   ├── Python Setup
 │   ├── Installation
 │   ├── First Program
 │   └── Development Environment
