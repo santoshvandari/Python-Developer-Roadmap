@@ -1,4 +1,4 @@
-# Complete Python Learning Guide
+# Python Learning Guide
 
 A comprehensive resource for learning Python programming from beginner to advanced level. This guide provides structured content, practical code examples, syntax explanations, and progressive learning paths to help you master Python programming concepts systematically.
 
@@ -22,7 +22,7 @@ This guide is organized into progressive skill levels, each building upon the pr
 - Development environment setup
 - Troubleshooting common issues
 
-### Beginner Level (0-2 months)
+### Beginner Level
 
 **[Basic Syntax](Roadmap/02-basic-syntax.md)**
 - Variables and naming conventions
@@ -49,7 +49,7 @@ This guide is organized into progressive skill levels, each building upon the pr
 - Working with files (basic)
 - Error handling for I/O operations
 
-### Intermediate Level (2-6 months)
+### Intermediate Level
 
 **[Control Structures](Roadmap/06-control-structures.md)**
 - Conditional statements (if/elif/else)
@@ -76,7 +76,7 @@ This guide is organized into progressive skill levels, each building upon the pr
 - Standard library overview
 - Virtual environments and package management
 
-### Advanced Level (6-12 months)
+### Advanced Level
 
 **[Object-Oriented Programming](Roadmap/10-oop.md)**
 - Classes, objects, and instances
@@ -96,7 +96,7 @@ This guide is organized into progressive skill levels, each building upon the pr
 - Binary files and serialization
 - File system operations with pathlib
 
-### Professional Level (12+ months)
+### Professional Level
 
 **[Popular Libraries](Roadmap/13-popular-libraries.md)**
 - NumPy for numerical computing
@@ -158,11 +158,20 @@ This guide is organized into progressive skill levels, each building upon the pr
 
 ## Contributing
 
-This guide is continuously improved based on community feedback. If you find errors, have suggestions, or want to contribute additional content, please feel free to:
+This guide is continuously improved based on community feedback. We welcome contributions from developers of all skill levels!
 
-- Open an issue for bugs or suggestions
-- Submit a pull request for improvements
-- Share your learning experience and feedback
+**How to Contribute:**
+- 📖 Read our [Contributing Guidelines](CONTRIBUTING.md) for detailed information
+- 🐛 Report bugs or suggest improvements via GitHub Issues
+- 🔧 Submit pull requests for content improvements
+- 💬 Join discussions and help other learners
+- 📝 Share your learning experience and feedback
+
+**Community Standards:**
+- Follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a welcoming environment
+- All skill levels are welcome and supported
+- Focus on educational value and clarity
+- Help create a positive learning community
 
 ## License
 
