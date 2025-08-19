@@ -5,6 +5,7 @@ A comprehensive resource for learning Python programming from beginner to advanc
 ## How to Use This Guide
 
 This guide is organized into progressive skill levels, each building upon the previous one. You can:
+
 - Start from the beginning if you're new to programming
 - Jump to specific sections based on your current knowledge
 - Use the code examples to practice and experiment
@@ -15,12 +16,14 @@ This guide is organized into progressive skill levels, each building upon the pr
 ## Table of Contents
 
 ### [Getting Started](#getting-started)
+
 - [Why Python?](#why-python)
 - [Installation](#installation)
 - [Your First Python Program](#your-first-python-program)
 - [Development Environment Setup](#development-environment-setup)
 
 ### [Beginner Level](#beginner-level)
+
 - [Basic Syntax](#basic-syntax)
   - [Variables and Naming](#variables-and-naming)
   - [Comments and Documentation](#comments-and-documentation)
@@ -43,6 +46,7 @@ This guide is organized into progressive skill levels, each building upon the pr
   - [Printing Output](#printing-output)
 
 ### [Intermediate Level](#intermediate-level)
+
 - [Control Structures](#control-structures)
   - [If/Elif/Else Statements](#conditional-statements)
   - [For Loops](#for-loops)
@@ -70,6 +74,7 @@ This guide is organized into progressive skill levels, each building upon the pr
   - [Virtual Environments](#virtual-environments)
 
 ### [Advanced Level](#advanced-level)
+
 - [Object-Oriented Programming](#object-oriented-programming)
   - [Classes and Objects](#classes-and-objects)
   - [Attributes and Methods](#attributes-and-methods)
@@ -93,6 +98,7 @@ This guide is organized into progressive skill levels, each building upon the pr
   - [File System Operations](#file-system-operations)
 
 ### [Professional Level](#professional-level)
+
 - [Popular Libraries](#popular-libraries)
   - [NumPy for Numerical Computing](#numpy-for-numerical-computing)
   - [Pandas for Data Manipulation](#pandas-for-data-manipulation)
@@ -109,6 +115,7 @@ This guide is organized into progressive skill levels, each building upon the pr
   - [Logging and Debugging](#logging-and-debugging)
 
 ### [Resources and Next Steps](#resources-and-next-steps)
+
 - [Practice Exercises](#practice-exercises)
 - [Project Ideas](#project-ideas)
 - [External Resources](#external-resources)
@@ -125,11 +132,13 @@ This guide is organized into progressive skill levels, each building upon the pr
 Python is one of the most popular and versatile programming languages in the world. Here's why it's perfect for beginners and professionals alike:
 
 **Easy to Learn**
+
 - Simple, readable syntax that resembles natural language
 - Minimal set to start coding
 - Extensive documentation and community support
 
 **Versatile Applications**
+
 - Web development (Django, Flask)
 - Data science and machine learning (NumPy, Pandas, TensorFlow)
 - Automation and scripting
@@ -138,6 +147,7 @@ Python is one of the most popular and versatile programming languages in the wor
 - Scientific computing
 
 **Career Opportunities**
+
 - High demand in job market
 - Used by major companies: Google, Netflix, Instagram, Spotify
 - Average salary ranges from $70k-$150k+ depending on experience
@@ -145,12 +155,15 @@ Python is one of the most popular and versatile programming languages in the wor
 ### Installation
 
 #### Windows
+
 1. **Download Python**
+
    - Visit [python.org](https://python.org/downloads/)
    - Download the latest Python 3.x version (3.8 or higher recommended)
    - Choose "Windows installer (64-bit)" for most systems
 
 2. **Install Python**
+
    - Run the downloaded installer
    - ⚠️ **IMPORTANT**: Check "Add Python to PATH" during installation
    - Click "Install Now"
@@ -164,16 +177,19 @@ Python is one of the most popular and versatile programming languages in the wor
    ```
 
 #### macOS
+
 1. **Using Homebrew (Recommended)**
+
    ```bash
    # Install Homebrew if you don't have it
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   
+
    # Install Python
    brew install python
    ```
 
 2. **Using Official Installer**
+
    - Visit [python.org](https://python.org/downloads/)
    - Download the macOS installer
    - Run the installer and follow instructions
@@ -185,6 +201,7 @@ Python is one of the most popular and versatile programming languages in the wor
    ```
 
 #### Linux (Ubuntu/Debian)
+
 ```bash
 # Update package list
 sudo apt update
@@ -198,6 +215,7 @@ pip3 --version
 ```
 
 #### Linux (CentOS/RHEL/Fedora)
+
 ```bash
 # For CentOS/RHEL
 sudo yum install python3 python3-pip
@@ -215,6 +233,7 @@ pip3 --version
 Let's write your first Python program! This traditional "Hello, World!" program will verify that Python is working correctly.
 
 #### Method 1: Interactive Python Shell
+
 ```bash
 # Open terminal/command prompt and type:
 python
@@ -223,6 +242,7 @@ python3
 ```
 
 You'll see the Python prompt (`>>>`). Now type:
+
 ```python
 >>> print("Hello, World!")
 Hello, World!
@@ -232,14 +252,16 @@ Welcome to Python!
 ```
 
 #### Method 2: Python Script File
+
 1. **Create a new file** called `hello.py`
 2. **Add this code**:
+
    ```python
    # My first Python program
    print("Hello, World!")
    print("My name is [Your Name]")
    print("I'm learning Python!")
-   
+
    # Let's do some basic math
    print("2 + 3 =", 2 + 3)
    print("10 - 4 =", 10 - 4)
@@ -255,6 +277,7 @@ Welcome to Python!
    ```
 
 **Expected Output:**
+
 ```
 Hello, World!
 My name is [Your Name]
@@ -274,7 +297,9 @@ While you can write Python code in any text editor, using a proper development e
 #### Recommended IDEs and Editors
 
 **For Beginners:**
+
 - **IDLE** (comes with Python)
+
   - Built-in Python editor
   - Simple and lightweight
   - Good for learning basics
@@ -285,7 +310,9 @@ While you can write Python code in any text editor, using a proper development e
   - Download from [thonny.org](https://thonny.org)
 
 **For Intermediate/Advanced:**
+
 - **Visual Studio Code** (Free)
+
   - Excellent Python extension
   - IntelliSense and debugging
   - Download from [code.visualstudio.com](https://code.visualstudio.com)
@@ -298,21 +325,24 @@ While you can write Python code in any text editor, using a proper development e
 #### Setting Up Visual Studio Code for Python
 
 1. **Install VS Code**
+
    - Download from [code.visualstudio.com](https://code.visualstudio.com)
    - Install following the setup wizard
 
 2. **Install Python Extension**
+
    - Open VS Code
    - Click Extensions icon (or Ctrl+Shift+X)
    - Search for "Python"
    - Install the Microsoft Python extension
 
 3. **Create Your First Project**
+
    ```bash
    # Create a new folder for your Python projects
    mkdir python-learning
    cd python-learning
-   
+
    # Open in VS Code
    code .
    ```
@@ -346,6 +376,7 @@ pip list                # Show installed packages
 #### Troubleshooting Common Issues
 
 **Problem: "python is not recognized" (Windows)**
+
 ```bash
 # Solution: Add Python to PATH
 # 1. Search "Environment Variables" in Start menu
@@ -355,6 +386,7 @@ pip list                # Show installed packages
 ```
 
 **Problem: Permission denied (macOS/Linux)**
+
 ```bash
 # Use python3 instead of python
 python3 filename.py
@@ -365,6 +397,7 @@ source ~/.bashrc
 ```
 
 **Problem: Module not found**
+
 ```bash
 # Make sure you're using the right Python version
 python --version
@@ -387,38 +420,322 @@ Ready to start coding? Let's move on to the [Beginner Level](#beginner-level)!
 
 ## Beginner Level
 
-*This section will be implemented in subsequent tasks*
+### Basic Syntax
+
+Python's syntax is designed to be readable and straightforward. Let's start with the fundamental building blocks of Python programming.
+
+#### Variables and Naming
+
+Variables are containers that store data values. In Python, you don't need to declare variable types explicitly.
+
+**Creating Variables:**
+
+```python
+# Simple variable assignment
+name = "Alice"
+age = 25
+height = 5.6
+is_student = True
+
+# Multiple assignment
+x, y, z = 1, 2, 3
+a = b = c = 0  # All variables get the same value
+
+# Printing variables
+print(name)      # Output: Alice
+print(age)       # Output: 25
+print(height)    # Output: 5.6
+print(is_student) # Output: True
+```
+
+**Variable Naming Rules:**
+
+```python
+# Valid variable names
+user_name = "John"
+firstName = "Jane"
+age2 = 30
+_private = "hidden"
+PI = 3.14159
+
+# Invalid variable names (will cause errors)
+# 2age = 30        # Cannot start with number
+# user-name = "X"  # Cannot contain hyphens
+# class = "Math"   # Cannot use Python keywords
+# user name = "Y"  # Cannot contain spaces
+```
+
+**Naming Conventions (PEP 8):**
+
+```python
+# Variables and functions: lowercase with underscores
+user_name = "Alice"
+total_count = 100
+
+# Constants: uppercase with underscores
+MAX_SIZE = 1000
+PI = 3.14159
+
+# Classes: PascalCase (we'll cover this later)
+# class UserAccount:
+#     pass
+```
+
+#### Comments and Documentation
+
+Comments help explain your code and make it more readable. Python ignores comments when executing code.
+
+**Single-line Comments:**
+
+```python
+# This is a single-line comment
+print("Hello, World!")  # Comment at end of line
+
+# Use comments to explain complex logic
+x = 5 * 2 + 3  # Calculate: (5 * 2) + 3 = 13
+```
+
+**Multi-line Comments:**
+
+```python
+# This is a multi-line comment
+# that spans several lines
+# Each line needs its own # symbol
+
+"""
+This is also a multi-line comment
+using triple quotes. This is actually
+a string, but when not assigned to a
+variable, Python ignores it.
+"""
+
+'''
+You can also use single quotes
+for multi-line comments.
+Both work the same way.
+'''
+```
+
+**Docstrings (Documentation Strings):**
+
+```python
+def calculate_area(length, width):
+    """
+    Calculate the area of a rectangle.
+
+    Args:
+        length (float): The length of the rectangle
+        width (float): The width of the rectangle
+
+    Returns:
+        float: The area of the rectangle
+    """
+    return length * width
+
+# Docstrings are used for function, class, and module documentation
+# They can be accessed using the help() function
+help(calculate_area)
+```
+
+#### Code Structure and Indentation
+
+Python uses indentation to define code blocks instead of curly braces like other languages.
+
+**Indentation Rules:**
+
+```python
+# Correct indentation
+if 5 > 3:
+    print("Five is greater than three")
+    print("This line is also indented")
+
+# Nested indentation
+if 10 > 5:
+    print("Ten is greater than five")
+    if 10 > 8:
+        print("Ten is also greater than eight")
+    print("Back to first level")
+
+# Function with proper indentation
+def greet_user(name):
+    if name:
+        print(f"Hello, {name}!")
+        print("Welcome to Python!")
+    else:
+        print("Hello, anonymous user!")
+
+greet_user("Alice")
+```
+
+**Common Indentation Mistakes:**
+
+```python
+# Wrong: Inconsistent indentation
+# if 5 > 3:
+#     print("This line uses 4 spaces")
+#   print("This line uses 2 spaces")  # IndentationError!
+
+# Wrong: Missing indentation
+# if 5 > 3:
+# print("This should be indented")  # IndentationError!
+
+# Correct: Consistent 4-space indentation (recommended)
+if 5 > 3:
+    print("This line uses 4 spaces")
+    print("This line also uses 4 spaces")
+```
+
+**Best Practices for Code Structure:**
+
+```python
+# Use 4 spaces for indentation (not tabs)
+# Keep lines under 79 characters when possible
+# Use blank lines to separate logical sections
+
+def main():
+    # Get user input
+    name = input("Enter your name: ")
+    age = int(input("Enter your age: "))
+
+    # Process the data
+    if age >= 18:
+        status = "adult"
+    else:
+        status = "minor"
+
+    # Display results
+    print(f"Name: {name}")
+    print(f"Age: {age}")
+    print(f"Status: {status}")
+
+# Call the main function
+if __name__ == "__main__":
+    main()
+```
+
+**Python Keywords Reference:**
+
+```python
+# These are reserved words in Python - cannot be used as variable names
+keywords = [
+    'False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class',
+    'continue', 'def', 'del', 'elif', 'else', 'except', 'finally',
+    'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda',
+    'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try',
+    'while', 'with', 'yield'
+]
+
+# You can check if a word is a keyword
+import keyword
+print(keyword.iskeyword('if'))    # Output: True
+print(keyword.iskeyword('hello')) # Output: False
+```
+
+**Line Continuation:**
+
+```python
+# For long lines, you can use backslash for continuation
+total = 1 + 2 + 3 + 4 + 5 + \
+        6 + 7 + 8 + 9 + 10
+
+# Or use parentheses (preferred method)
+total = (1 + 2 + 3 + 4 + 5 +
+         6 + 7 + 8 + 9 + 10)
+
+# Works with strings too
+message = ("This is a very long message that "
+           "spans multiple lines for better "
+           "readability")
+
+print(total)    # Output: 55
+print(message)  # Output: This is a very long message that spans multiple lines for better readability
+```
+
+**Practice Exercise:**
+Try creating a simple program that demonstrates proper syntax:
+
+```python
+# Practice: Personal Information Program
+def display_info():
+    """Display personal information with proper formatting."""
+
+    # Variable assignment
+    first_name = "John"
+    last_name = "Doe"
+    age = 28
+    height = 5.9
+    is_employed = True
+
+    # Display information
+    print("Personal Information:")
+    print("-" * 20)  # Print a line separator
+    print(f"Name: {first_name} {last_name}")
+    print(f"Age: {age} years old")
+    print(f"Height: {height} feet")
+
+    # Conditional display
+    if is_employed:
+        print("Employment Status: Employed")
+    else:
+        print("Employment Status: Unemployed")
+
+# Run the program
+display_info()
+```
+
+**Expected Output:**
+
+```
+Personal Information:
+--------------------
+Name: John Doe
+Age: 28 years old
+Height: 5.9 feet
+Employment Status: Employed
+```
+
+**Key Takeaways:**
+
+- Variables don't need type declarations
+- Use descriptive variable names with underscores
+- Comments start with # for single lines
+- Use triple quotes for multi-line comments and docstrings
+- Python uses 4-space indentation to define code blocks
+- Avoid using Python keywords as variable names
+- Keep your code clean and well-organized
 
 ## Intermediate Level
 
-*This section will be implemented in subsequent tasks*
+_This section will be implemented in subsequent tasks_
 
 ## Advanced Level
 
-*This section will be implemented in subsequent tasks*
+_This section will be implemented in subsequent tasks_
 
 ## Professional Level
 
-*This section will be implemented in subsequent tasks*
+_This section will be implemented in subsequent tasks_
 
 ## Resources and Next Steps
 
-*This section will be implemented in subsequent tasks*
+_This section will be implemented in subsequent tasks_
 
 ---
 
 ## Quick Reference
 
 ### Python Keywords
+
 ```python
 # Reserved words in Python (cannot be used as variable names)
-False, None, True, and, as, assert, break, class, continue, def, 
-del, elif, else, except, finally, for, from, global, if, import, 
-in, is, lambda, nonlocal, not, or, pass, raise, return, try, 
+False, None, True, and, as, assert, break, class, continue, def,
+del, elif, else, except, finally, for, from, global, if, import,
+in, is, lambda, nonlocal, not, or, pass, raise, return, try,
 while, with, yield
 ```
 
 ### Common Python File Extensions
+
 - `.py` - Python source files
 - `.pyc` - Compiled Python files
 - `.pyo` - Optimized compiled files
@@ -427,4 +744,4 @@ while, with, yield
 
 ---
 
-*This guide is continuously updated. Last updated: 2025*
+_This guide is continuously updated. Last updated: 2025_
