@@ -198,7 +198,6 @@ This guide is organized into progressive skill levels, each building upon the pr
 
 <div align="center">
   <img src="https://opensource.com/sites/default/files/lead-images/BUSINESS_community_1.png" alt="Community Collaboration" width="500"/>
-  <p><em>Join our community of Python learners and contributors</em></p>
 </div>
 
 This guide is continuously improved based on community feedback. We welcome contributions from developers of all skill levels!
