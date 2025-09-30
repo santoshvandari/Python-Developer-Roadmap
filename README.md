@@ -14,6 +14,8 @@
 
 This guide provides structured content, practical code examples, syntax explanations, and progressive learning paths to help you master Python programming concepts systematically.
 
+Note: If you want to do some python based beginners friendly to advance level projects, Please check out [Projects](Projects) 
+
 ## How to Use This Guide
 
 This guide is organized into progressive skill levels, each building upon the previous one. Each section is now in its own file for better organization and easier navigation.
