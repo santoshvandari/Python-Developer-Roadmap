@@ -6,7 +6,7 @@
 </div>
 
 ---
-
+-
 ## 🎯 Project Overview
 
 Create a fun and interactive number guessing game where the computer generates a random number and the player tries to guess it. This project will teach you about loops, conditionals, random number generation, and user interaction.

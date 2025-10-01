@@ -6,29 +6,29 @@ Welcome to the Python Projects section! These projects are designed to help you 
 
 ### Beginner Level Projects
 
-| Project | Description | Key Concepts |
-|---------|-------------|-------------|
-| [Calculator](Calculator/) | Build a calculator with basic and advanced operations | Variables, operators, functions, error handling |
-| [Number Guessing Game](NumberGuessingGame/) | Interactive guessing game with difficulty levels | Loops, conditionals, random numbers, user input |
-| [Password Generator](PasswordGenerator/) | Generate secure passwords with customizable options | Strings, lists, random selection, file operations |
-| [Todo List](TodoList/) | Manage tasks with add, remove, and save functionality | Lists, dictionaries, file handling, data persistence |
-| [Simple Text Editor](SimpleTextEditor/) | Basic text editor with file operations | File I/O, string manipulation, basic GUI |
+| Project | Key Concepts |
+|---------|-------------|
+| [Calculator](./Beginners/Calculator/README.md) | Variables, operators, functions, error handling |
+| [Number Guessing Game](./Beginners/NumberGuessingGame/README.md) | Loops, conditionals, random numbers, user input |
+| [Password Generator](./Beginners/PasswordGenerator/README.md) | Strings, lists, random selection, file operations |
+| [Todo List](./Beginners/TodoList/README.md) | Lists, dictionaries, file handling, data persistence |
+| [Simple Text Editor](./Beginners/SimpleTextEditor/README.md) | File I/O, string manipulation, basic GUI |
 
 ### Intermediate Level Projects
 
-| Project | Description | Key Concepts |
-|---------|-------------|-------------|
-| [Contact Book](ContactBook/) | Store and manage contact information | Classes, file persistence, data validation |
-| [Expense Tracker](ExpenseTracker/) | Track personal expenses with categories | Data analysis, file handling, date/time operations |
-| [Web Scraper](WebScraper/) | Extract data from websites | HTTP requests, HTML parsing, data processing |
-| [Quiz Game](QuizGame/) | Interactive quiz with scoring system | Object-oriented programming, JSON handling |
+| Project | Key Concepts |
+|---------|-------------|
+| [Contact Book](ContactBook/) | Classes, file persistence, data validation |
+| [Expense Tracker](ExpenseTracker/) | Data analysis, file handling, date/time operations |
+| [Web Scraper](WebScraper/) | HTTP requests, HTML parsing, data processing |
+| [Quiz Game](QuizGame/) | Object-oriented programming, JSON handling |
 
 ### Advanced Level Projects
 
-| Project | Description | Key Concepts |
-|---------|-------------|-------------|
-| [Server](Server/) | Web server with API endpoints | Web frameworks, HTTP protocols, databases |
-| [Data Analysis Dashboard](DataDashboard/) | Visualize data with charts and graphs | Data science libraries, visualization, statistics |
+| Project | Key Concepts |
+|---------|-------------|
+| [Server](Server/) | Web frameworks, HTTP protocols, databases |
+| [Data Analysis Dashboard](DataDashboard/) | Data science libraries, visualization, statistics |
 
 ## Getting Started
 
