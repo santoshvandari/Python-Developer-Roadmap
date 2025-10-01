@@ -18,17 +18,17 @@ Welcome to the Python Projects section! These projects are designed to help you 
 
 | Project | Key Concepts |
 |---------|-------------|
-| [Contact Book](ContactBook/) | Classes, file persistence, data validation |
-| [Expense Tracker](ExpenseTracker/) | Data analysis, file handling, date/time operations |
-| [Web Scraper](WebScraper/) | HTTP requests, HTML parsing, data processing |
-| [Quiz Game](QuizGame/) | Object-oriented programming, JSON handling |
+| [Contact Book](./Intermediate/ContactBook/README.md) | Classes, file persistence, data validation |
+| [Expense Tracker](./Intermediate/ExpenseTracker/README.md) | Data analysis, file handling, date/time operations |
+| [Web Scraper](./Intermediate/WebScraper/README.md) | HTTP requests, HTML parsing, data processing |
+| [Quiz Game](./Intermediate/QuizGame/README.md) | Object-oriented programming, JSON handling |
 
 ### Advanced Level Projects
 
 | Project | Key Concepts |
 |---------|-------------|
-| [Server](Server/) | Web frameworks, HTTP protocols, databases |
-| [Data Analysis Dashboard](DataDashboard/) | Data science libraries, visualization, statistics |
+| [Server](./Advanced/Server/README.md) | Web frameworks, HTTP protocols, databases |
+| [Data Analysis Dashboard](./Advanced/DataDashboard/README.md) | Data science libraries, visualization, statistics |
 
 ## Getting Started
 
