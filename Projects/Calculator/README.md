@@ -104,16 +104,6 @@ Create a visual calculator:
 - Scientific functions: sqrt(16), sin(90), log(100)
 - Memory operations: Store, recall, clear
 
-### Common Issues and Solutions
-
-**Problem**: "ValueError: invalid literal for float()"
-**Solution**: Add try-except blocks around input conversion
-
-**Problem**: Division by zero error
-**Solution**: Check if denominator is zero before division
-
-**Problem**: Invalid operation entered
-**Solution**: Validate operation against allowed list
 
 ## Extensions and Improvements
 

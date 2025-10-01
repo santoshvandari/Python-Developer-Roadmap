@@ -92,21 +92,4 @@ We welcome contributions to improve these projects:
 - Share project extensions and variations
 - Report issues or unclear instructions
 
-## Additional Resources
-
-### Practice Platforms
-- HackerRank Python Domain
-- LeetCode Python Problems
-- Codewars Python Kata
-- Python Challenge
-
-### Project Ideas for Further Practice
-- File Organizer
-- Weather App
-- URL Shortener
-- Markdown to HTML Converter
-- Chat Bot
-- Image Resizer
-- Budget Tracker
-
 Ready to start coding? Choose a project that matches your skill level and begin building!
