@@ -1,1 +1,403 @@
-# Web Scraper Project\n\nBuild a web scraping tool to extract data from websites and save it in structured formats.\n\n## Project Overview\n\n**What you'll build**: A web scraper that can extract specific data from websites, handle different page structures, and save results in various formats.\n\n**What you'll learn**:\n- HTTP requests and response handling\n- HTML parsing and navigation\n- Data extraction and cleaning\n- Working with external libraries\n- Error handling and retry logic\n- Ethical scraping practices\n\n## Project Features\n\n### Core Features\n- Send HTTP requests to websites\n- Parse HTML content\n- Extract specific data elements\n- Save data to files (CSV, JSON)\n- Handle basic error conditions\n- Simple progress tracking\n\n### Advanced Features\n- Handle JavaScript-rendered content\n- Manage sessions and cookies\n- Implement rate limiting and delays\n- Handle different file formats\n- Batch processing of multiple URLs\n- Data validation and cleaning\n\n## Implementation Guide\n\n### Phase 1: Basic Web Requests\n**Time**: 2-3 hours\n\nStart with simple HTTP requests:\n- Make requests to websites\n- Parse HTML with BeautifulSoup\n- Extract basic text content\n- Save to text files\n\n**Key concepts**: HTTP requests, HTML parsing, file operations\n\n### Phase 2: Structured Data Extraction\n**Time**: 3-4 hours\n\nExtract specific data:\n- Target specific HTML elements\n- Extract multiple data points\n- Structure data in dictionaries/lists\n- Save to CSV and JSON formats\n\n**Key concepts**: CSS selectors, data structures, file formats\n\n### Phase 3: Error Handling and Robustness\n**Time**: 3-4 hours\n\nMake scraper more reliable:\n- Handle network errors\n- Implement retry logic\n- Add rate limiting\n- Validate extracted data\n\n**Key concepts**: Exception handling, retry mechanisms, validation\n\n### Phase 4: Advanced Features\n**Time**: 4-5 hours\n\nAdd sophisticated functionality:\n- Handle dynamic content (Selenium)\n- Process multiple pages\n- Implement data cleaning\n- Create configurable scrapers\n\n**Key concepts**: Browser automation, configuration management, data processing\n\n## Getting Started\n\n### Required Libraries\n```bash\npip install requests beautifulsoup4 lxml pandas selenium\n```\n\n### Basic Setup\n```python\nimport requests\nfrom bs4 import BeautifulSoup\nimport csv\nimport json\nimport time\nfrom urllib.parse import urljoin, urlparse\n\nclass WebScraper:\n    def __init__(self, base_url, headers=None):\n        self.base_url = base_url\n        self.session = requests.Session()\n        self.headers = headers or {\n            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'\n        }\n        self.session.headers.update(self.headers)\n```\n\n## Core Functionality\n\n### Making HTTP Requests\n```python\ndef fetch_page(self, url, timeout=10):\n    try:\n        response = self.session.get(url, timeout=timeout)\n        response.raise_for_status()  # Raise exception for bad status codes\n        return response\n    except requests.RequestException as e:\n        print(f\"Error fetching {url}: {e}\")\n        return None\n```\n\n### HTML Parsing\n```python\ndef parse_html(self, html_content):\n    return BeautifulSoup(html_content, 'html.parser')\n\ndef extract_data(self, soup, selectors):\n    data = {}\n    for key, selector in selectors.items():\n        elements = soup.select(selector)\n        if elements:\n            data[key] = [elem.get_text(strip=True) for elem in elements]\n        else:\n            data[key] = []\n    return data\n```\n\n## Example Scrapers\n\n### News Article Scraper\n```python\nclass NewsArticleScraper(WebScraper):\n    def __init__(self):\n        super().__init__(\"https://example-news-site.com\")\n        self.selectors = {\n            'title': 'h1.article-title',\n            'author': '.author-name',\n            'date': '.publish-date',\n            'content': '.article-content p'\n        }\n    \n    def scrape_article(self, article_url):\n        response = self.fetch_page(article_url)\n        if not response:\n            return None\n        \n        soup = self.parse_html(response.text)\n        return self.extract_data(soup, self.selectors)\n```\n\n### Product Information Scraper\n```python\nclass ProductScraper(WebScraper):\n    def __init__(self):\n        super().__init__(\"https://example-store.com\")\n        self.selectors = {\n            'name': '.product-title',\n            'price': '.price',\n            'rating': '.rating',\n            'description': '.product-description'\n        }\n    \n    def scrape_products(self, category_url):\n        products = []\n        response = self.fetch_page(category_url)\n        if not response:\n            return products\n        \n        soup = self.parse_html(response.text)\n        product_links = soup.select('.product-link')\n        \n        for link in product_links:\n            product_url = urljoin(self.base_url, link.get('href'))\n            product_data = self.scrape_product(product_url)\n            if product_data:\n                products.append(product_data)\n            time.sleep(1)  # Rate limiting\n        \n        return products\n```\n\n## Data Storage and Export\n\n### Save to CSV\n```python\ndef save_to_csv(self, data, filename):\n    if not data:\n        return\n    \n    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:\n        fieldnames = data[0].keys()\n        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)\n        writer.writeheader()\n        writer.writerows(data)\n```\n\n### Save to JSON\n```python\ndef save_to_json(self, data, filename):\n    with open(filename, 'w', encoding='utf-8') as jsonfile:\n        json.dump(data, jsonfile, indent=2, ensure_ascii=False)\n```\n\n## Error Handling and Best Practices\n\n### Retry Logic\n```python\ndef fetch_with_retry(self, url, max_retries=3, delay=1):\n    for attempt in range(max_retries):\n        try:\n            response = self.fetch_page(url)\n            if response:\n                return response\n        except Exception as e:\n            print(f\"Attempt {attempt + 1} failed: {e}\")\n            if attempt < max_retries - 1:\n                time.sleep(delay * (2 ** attempt))  # Exponential backoff\n    return None\n```\n\n### Rate Limiting\n```python\nclass RateLimiter:\n    def __init__(self, delay=1):\n        self.delay = delay\n        self.last_request = 0\n    \n    def wait(self):\n        elapsed = time.time() - self.last_request\n        if elapsed < self.delay:\n            time.sleep(self.delay - elapsed)\n        self.last_request = time.time()\n```\n\n### Respecting robots.txt\n```python\nimport urllib.robotparser\n\ndef can_fetch(self, url):\n    rp = urllib.robotparser.RobotFileParser()\n    rp.set_url(urljoin(url, '/robots.txt'))\n    rp.read()\n    return rp.can_fetch(self.headers.get('User-Agent', '*'), url)\n```\n\n## Advanced Features\n\n### JavaScript Rendering with Selenium\n```python\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\n\nclass JavaScriptScraper:\n    def __init__(self):\n        self.driver = webdriver.Chrome()  # Requires ChromeDriver\n    \n    def scrape_dynamic_content(self, url, wait_selector):\n        self.driver.get(url)\n        wait = WebDriverWait(self.driver, 10)\n        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, wait_selector)))\n        return self.driver.page_source\n    \n    def close(self):\n        self.driver.quit()\n```\n\n### Configuration-Driven Scraping\n```python\nscraper_config = {\n    \"name\": \"news_scraper\",\n    \"base_url\": \"https://example-news.com\",\n    \"selectors\": {\n        \"title\": \"h1.title\",\n        \"content\": \".article-body p\"\n    },\n    \"rate_limit\": 2,\n    \"output_format\": \"json\"\n}\n\nclass ConfigurableScraper:\n    def __init__(self, config):\n        self.config = config\n        self.scraper = WebScraper(config['base_url'])\n        self.rate_limiter = RateLimiter(config.get('rate_limit', 1))\n```\n\n## Testing Your Scraper\n\n### Test Targets\n- Start with simple, static websites\n- Test with different HTML structures\n- Handle missing elements gracefully\n- Test rate limiting and error handling\n- Validate extracted data\n\n### Sample Test Sites\n- http://quotes.toscrape.com/ (beginner-friendly)\n- https://books.toscrape.com/ (practice site)\n- https://httpbin.org/ (HTTP testing)\n\n## Ethical Considerations\n\n### Best Practices\n- Always check robots.txt\n- Respect rate limits and don't overload servers\n- Use appropriate User-Agent headers\n- Don't scrape copyrighted content without permission\n- Consider using official APIs when available\n\n### Legal Considerations\n- Review website terms of service\n- Understand copyright and data protection laws\n- Consider fair use principles\n- Respect website owners' wishes\n\n## Extensions and Improvements\n\n### Beginner Extensions\n- Email alert when new content is found\n- Simple data analysis and visualization\n- Scheduled scraping with cron jobs\n- Basic duplicate detection\n\n### Intermediate Extensions\n- Distributed scraping with multiple workers\n- Database storage for large datasets\n- Web interface for configuration\n- Integration with data analysis tools\n\n### Advanced Extensions\n- Machine learning for content classification\n- Proxy rotation for large-scale scraping\n- Real-time scraping with websockets\n- Cloud deployment and scaling\n\n## Common Issues and Solutions\n\n**Issue**: Scraper gets blocked by anti-bot measures\n**Solution**: Rotate User-Agents, use proxies, implement longer delays\n\n**Issue**: JavaScript content not loading\n**Solution**: Use Selenium or similar browser automation tools\n\n**Issue**: Data extraction returns empty results\n**Solution**: Inspect HTML structure, update selectors, handle dynamic content\n\n**Issue**: Memory usage grows too large\n**Solution**: Process data in batches, use generators, clear variables\n\n## Learning Outcomes\n\nAfter completing this project, you'll understand:\n- HTTP protocol and web communication\n- HTML structure and parsing techniques\n- Error handling and retry strategies\n- Data extraction and cleaning methods\n- Ethical considerations in web scraping\n- Working with external libraries and APIs\n\n## File Structure\n\n```\nweb_scraper/\n├── scrapers/\n│   ├── base_scraper.py    # Base scraper class\n│   ├── news_scraper.py    # News website scraper\n│   └── product_scraper.py # E-commerce scraper\n├── utils/\n│   ├── rate_limiter.py    # Rate limiting utilities\n│   ├── data_cleaner.py    # Data cleaning functions\n│   └── file_handler.py    # File operations\n├── config/\n│   ├── scrapers.json      # Scraper configurations\n│   └── settings.py        # Global settings\n├── data/\n│   ├── raw/               # Raw scraped data\n│   └── processed/         # Cleaned data\n├── logs/\n│   └── scraper.log        # Scraping logs\n└── README.md              # Project documentation\n```\n\n## Next Steps\n\nOnce you've completed your web scraper:\n1. Practice on different types of websites\n2. Build scrapers for your specific needs\n3. Learn about data analysis with pandas\n4. Explore API alternatives to scraping\n5. Try the Quiz Game project next for more interactive programming\n\nGreat job on building a powerful data collection tool!
+# Web Scraper Project
+
+Build a web scraping tool to extract data from websites and save it in structured formats.
+
+## Project Overview
+
+**What you'll build**: A web scraper that can extract specific data from websites, handle different page structures, and save results in various formats.
+
+**What you'll learn**:
+- HTTP requests and response handling
+- HTML parsing and navigation
+- Data extraction and cleaning
+- Working with external libraries
+- Error handling and retry logic
+- Ethical scraping practices
+
+## Project Features
+
+### Core Features
+- Send HTTP requests to websites
+- Parse HTML content
+- Extract specific data elements
+- Save data to files (CSV, JSON)
+- Handle basic error conditions
+- Simple progress tracking
+
+### Advanced Features
+- Handle JavaScript-rendered content
+- Manage sessions and cookies
+- Implement rate limiting and delays
+- Handle different file formats
+- Batch processing of multiple URLs
+- Data validation and cleaning
+
+## Implementation Guide
+
+### Phase 1: Basic Web Requests
+**Time**: 2-3 hours
+
+Start with simple HTTP requests:
+- Make requests to websites
+- Parse HTML with BeautifulSoup
+- Extract basic text content
+- Save to text files
+
+**Key concepts**: HTTP requests, HTML parsing, file operations
+
+### Phase 2: Structured Data Extraction
+**Time**: 3-4 hours
+
+Extract specific data:
+- Target specific HTML elements
+- Extract multiple data points
+- Structure data in dictionaries/lists
+- Save to CSV and JSON formats
+
+**Key concepts**: CSS selectors, data structures, file formats
+
+### Phase 3: Error Handling and Robustness
+**Time**: 3-4 hours
+
+Make scraper more reliable:
+- Handle network errors
+- Implement retry logic
+- Add rate limiting
+- Validate extracted data
+
+**Key concepts**: Exception handling, retry mechanisms, validation
+
+### Phase 4: Advanced Features
+**Time**: 4-5 hours
+
+Add sophisticated functionality:
+- Handle dynamic content (Selenium)
+- Process multiple pages
+- Implement data cleaning
+- Create configurable scrapers
+
+**Key concepts**: Browser automation, configuration management, data processing
+
+## Getting Started
+
+### Required Libraries
+```bash
+pip install requests beautifulsoup4 lxml pandas selenium
+```
+
+### Basic Setup
+```python
+import requests
+from bs4 import BeautifulSoup
+import csv
+import json
+import time
+from urllib.parse import urljoin, urlparse
+
+class WebScraper:
+    def __init__(self, base_url, headers=None):
+        self.base_url = base_url
+        self.session = requests.Session()
+        self.headers = headers or {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        self.session.headers.update(self.headers)
+```
+
+## Core Functionality
+
+### Making HTTP Requests
+```python
+def fetch_page(self, url, timeout=10):
+    try:
+        response = self.session.get(url, timeout=timeout)
+        response.raise_for_status()  # Raise exception for bad status codes
+        return response
+    except requests.RequestException as e:
+        print(f"Error fetching {url}: {e}")
+        return None
+```
+
+### HTML Parsing
+```python
+def parse_html(self, html_content):
+    return BeautifulSoup(html_content, 'html.parser')
+
+def extract_data(self, soup, selectors):
+    data = {}
+    for key, selector in selectors.items():
+        elements = soup.select(selector)
+        if elements:
+            data[key] = [elem.get_text(strip=True) for elem in elements]
+        else:
+            data[key] = []
+    return data
+```
+
+## Example Scrapers
+
+### News Article Scraper
+```python
+class NewsArticleScraper(WebScraper):
+    def __init__(self):
+        super().__init__("https://example-news-site.com")
+        self.selectors = {
+            'title': 'h1.article-title',
+            'author': '.author-name',
+            'date': '.publish-date',
+            'content': '.article-content p'
+        }
+    
+    def scrape_article(self, article_url):
+        response = self.fetch_page(article_url)
+        if not response:
+            return None
+        
+        soup = self.parse_html(response.text)
+        return self.extract_data(soup, self.selectors)
+```
+
+### Product Information Scraper
+```python
+class ProductScraper(WebScraper):
+    def __init__(self):
+        super().__init__("https://example-store.com")
+        self.selectors = {
+            'name': '.product-title',
+            'price': '.price',
+            'rating': '.rating',
+            'description': '.product-description'
+        }
+    
+    def scrape_products(self, category_url):
+        products = []
+        response = self.fetch_page(category_url)
+        if not response:
+            return products
+        
+        soup = self.parse_html(response.text)
+        product_links = soup.select('.product-link')
+        
+        for link in product_links:
+            product_url = urljoin(self.base_url, link.get('href'))
+            product_data = self.scrape_product(product_url)
+            if product_data:
+                products.append(product_data)
+            time.sleep(1)  # Rate limiting
+        
+        return products
+```
+
+## Data Storage and Export
+
+### Save to CSV
+```python
+def save_to_csv(self, data, filename):
+    if not data:
+        return
+    
+    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = data[0].keys()
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data)
+```
+
+### Save to JSON
+```python
+def save_to_json(self, data, filename):
+    with open(filename, 'w', encoding='utf-8') as jsonfile:
+        json.dump(data, jsonfile, indent=2, ensure_ascii=False)
+```
+
+## Error Handling and Best Practices
+
+### Retry Logic
+```python
+def fetch_with_retry(self, url, max_retries=3, delay=1):
+    for attempt in range(max_retries):
+        try:
+            response = self.fetch_page(url)
+            if response:
+                return response
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(delay * (2 ** attempt))  # Exponential backoff
+    return None
+```
+
+### Rate Limiting
+```python
+class RateLimiter:
+    def __init__(self, delay=1):
+        self.delay = delay
+        self.last_request = 0
+    
+    def wait(self):
+        elapsed = time.time() - self.last_request
+        if elapsed < self.delay:
+            time.sleep(self.delay - elapsed)
+        self.last_request = time.time()
+```
+
+### Respecting robots.txt
+```python
+import urllib.robotparser
+
+def can_fetch(self, url):
+    rp = urllib.robotparser.RobotFileParser()
+    rp.set_url(urljoin(url, '/robots.txt'))
+    rp.read()
+    return rp.can_fetch(self.headers.get('User-Agent', '*'), url)
+```
+
+## Advanced Features
+
+### JavaScript Rendering with Selenium
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+class JavaScriptScraper:
+    def __init__(self):
+        self.driver = webdriver.Chrome()  # Requires ChromeDriver
+    
+    def scrape_dynamic_content(self, url, wait_selector):
+        self.driver.get(url)
+        wait = WebDriverWait(self.driver, 10)
+        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, wait_selector)))
+        return self.driver.page_source
+    
+    def close(self):
+        self.driver.quit()
+```
+
+### Configuration-Driven Scraping
+```python
+scraper_config = {
+    "name": "news_scraper",
+    "base_url": "https://example-news.com",
+    "selectors": {
+        "title": "h1.title",
+        "content": ".article-body p"
+    },
+    "rate_limit": 2,
+    "output_format": "json"
+}
+
+class ConfigurableScraper:
+    def __init__(self, config):
+        self.config = config
+        self.scraper = WebScraper(config['base_url'])
+        self.rate_limiter = RateLimiter(config.get('rate_limit', 1))
+```
+
+## Testing Your Scraper
+
+### Test Targets
+- Start with simple, static websites
+- Test with different HTML structures
+- Handle missing elements gracefully
+- Test rate limiting and error handling
+- Validate extracted data
+
+### Sample Test Sites
+- http://quotes.toscrape.com/ (beginner-friendly)
+- https://books.toscrape.com/ (practice site)
+- https://httpbin.org/ (HTTP testing)
+
+## Ethical Considerations
+
+### Best Practices
+- Always check robots.txt
+- Respect rate limits and don't overload servers
+- Use appropriate User-Agent headers
+- Don't scrape copyrighted content without permission
+- Consider using official APIs when available
+
+### Legal Considerations
+- Review website terms of service
+- Understand copyright and data protection laws
+- Consider fair use principles
+- Respect website owners' wishes
+
+## Extensions and Improvements
+
+### Beginner Extensions
+- Email alert when new content is found
+- Simple data analysis and visualization
+- Scheduled scraping with cron jobs
+- Basic duplicate detection
+
+### Intermediate Extensions
+- Distributed scraping with multiple workers
+- Database storage for large datasets
+- Web interface for configuration
+- Integration with data analysis tools
+
+### Advanced Extensions
+- Machine learning for content classification
+- Proxy rotation for large-scale scraping
+- Real-time scraping with websockets
+- Cloud deployment and scaling
+
+## Common Issues and Solutions
+
+**Issue**: Scraper gets blocked by anti-bot measures
+**Solution**: Rotate User-Agents, use proxies, implement longer delays
+
+**Issue**: JavaScript content not loading
+**Solution**: Use Selenium or similar browser automation tools
+
+**Issue**: Data extraction returns empty results
+**Solution**: Inspect HTML structure, update selectors, handle dynamic content
+
+**Issue**: Memory usage grows too large
+**Solution**: Process data in batches, use generators, clear variables
+
+## Learning Outcomes
+
+After completing this project, you'll understand:
+- HTTP protocol and web communication
+- HTML structure and parsing techniques
+- Error handling and retry strategies
+- Data extraction and cleaning methods
+- Ethical considerations in web scraping
+- Working with external libraries and APIs
+
+## File Structure
+
+```
+web_scraper/
+├── scrapers/
+│   ├── base_scraper.py    # Base scraper class
+│   ├── news_scraper.py    # News website scraper
+│   └── product_scraper.py # E-commerce scraper
+├── utils/
+│   ├── rate_limiter.py    # Rate limiting utilities
+│   ├── data_cleaner.py    # Data cleaning functions
+│   └── file_handler.py    # File operations
+├── config/
+│   ├── scrapers.json      # Scraper configurations
+│   └── settings.py        # Global settings
+├── data/
+│   ├── raw/               # Raw scraped data
+│   └── processed/         # Cleaned data
+├── logs/
+│   └── scraper.log        # Scraping logs
+└── README.md              # Project documentation
+```
+
+## Next Steps
+
+Once you've completed your web scraper:
+1. Practice on different types of websites
+2. Build scrapers for your specific needs
+3. Learn about data analysis with pandas
+4. Explore API alternatives to scraping
+5. Try the Quiz Game project next for more interactive programming
+
+Great job on building a powerful data collection tool!

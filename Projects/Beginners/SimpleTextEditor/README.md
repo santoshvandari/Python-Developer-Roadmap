@@ -1,1 +1,277 @@
-# Simple Text Editor Project\n\nBuild a basic text editor application with file operations and text manipulation features.\n\n## Project Overview\n\n**What you'll build**: A text editor that can open, edit, and save text files with basic formatting and search functionality.\n\n**What you'll learn**:\n- File input/output operations\n- String manipulation and text processing\n- Basic GUI programming with tkinter\n- Event handling and user interface design\n- Working with text widgets and menus\n\n## Project Features\n\n### Basic Features\n- Open and display text files\n- Edit text content\n- Save files to disk\n- Basic menu system (File, Edit)\n- Text area with scrollbars\n\n### Advanced Features\n- Find and replace functionality\n- Cut, copy, paste operations\n- Undo/redo functionality\n- Word count and statistics\n- Basic text formatting\n- Multiple file tabs\n\n## Implementation Guide\n\n### Phase 1: Basic File Operations\n**Time**: 2-3 hours\n\nCreate command-line text editor:\n- Read file contents\n- Allow text editing\n- Save changes back to file\n- Handle file errors\n\n**Key concepts**: File I/O, string operations, error handling\n\n### Phase 2: GUI Interface\n**Time**: 3-4 hours\n\nBuild graphical interface:\n- Main window with text area\n- File menu (New, Open, Save, Exit)\n- Edit menu (Cut, Copy, Paste)\n- Status bar\n\n**Key concepts**: tkinter GUI, widgets, menu systems\n\n### Phase 3: Enhanced Editing\n**Time**: 3-4 hours\n\nAdd advanced features:\n- Find and replace dialog\n- Undo/redo functionality\n- Line numbers display\n- Word wrap toggle\n- Font size and family selection\n\n**Key concepts**: Advanced GUI programming, text processing\n\n### Phase 4: Advanced Features\n**Time**: 4-5 hours\n\nImplement professional features:\n- Syntax highlighting for code\n- Multiple document interface\n- Auto-save functionality\n- Recent files menu\n- Customizable themes\n\n**Key concepts**: Advanced text processing, configuration management\n\n## Getting Started\n\n### Setup\n1. Create project directory\n2. Plan the user interface layout\n3. Design the file handling system\n\n### Basic Structure\n```python\nimport tkinter as tk\nfrom tkinter import filedialog, messagebox, scrolledtext\n\nclass SimpleTextEditor:\n    def __init__(self, root):\n        self.root = root\n        self.current_file = None\n        self.text_changed = False\n        self.setup_ui()\n    \n    def setup_ui(self):\n        # Create menu bar\n        # Create text area\n        # Create status bar\n        pass\n```\n\n## User Interface Design\n\n### Main Window Layout\n- Menu bar at top (File, Edit, View, Help)\n- Toolbar with common actions (optional)\n- Large text editing area in center\n- Status bar at bottom showing line/column, word count\n- Scrollbars for text area\n\n### Menu Structure\n```\nFile\n├── New (Ctrl+N)\n├── Open (Ctrl+O)\n├── Save (Ctrl+S)\n├── Save As (Ctrl+Shift+S)\n├── Recent Files\n└── Exit\n\nEdit\n├── Undo (Ctrl+Z)\n├── Redo (Ctrl+Y)\n├── Cut (Ctrl+X)\n├── Copy (Ctrl+C)\n├── Paste (Ctrl+V)\n├── Find (Ctrl+F)\n└── Replace (Ctrl+H)\n```\n\n## Core Functionality\n\n### File Operations\n- New file: Clear text area and reset file path\n- Open file: Use file dialog to select and load file\n- Save file: Write current text to file\n- Save As: Choose new location and save\n\n### Text Editing\n- Standard text input and editing\n- Keyboard shortcuts for common operations\n- Mouse support for selection and cursor positioning\n- Clipboard integration\n\n### Search and Replace\n- Find text with highlighting\n- Replace single or all occurrences\n- Case-sensitive option\n- Regular expression support (advanced)\n\n## Implementation Examples\n\n### Basic File Operations\n```python\ndef open_file(self):\n    file_path = filedialog.askopenfilename(\n        title=\"Open File\",\n        filetypes=[(\"Text Files\", \"*.txt\"), (\"All Files\", \"*.*\")]\n    )\n    if file_path:\n        try:\n            with open(file_path, 'r', encoding='utf-8') as file:\n                content = file.read()\n                self.text_area.delete(1.0, tk.END)\n                self.text_area.insert(1.0, content)\n                self.current_file = file_path\n                self.update_title()\n        except Exception as e:\n            messagebox.showerror(\"Error\", f\"Could not open file: {e}\")\n```\n\n### Text Change Detection\n```python\ndef on_text_change(self, event=None):\n    self.text_changed = True\n    self.update_title()\n    self.update_status_bar()\n\ndef update_title(self):\n    title = \"Simple Text Editor\"\n    if self.current_file:\n        title += f\" - {os.path.basename(self.current_file)}\"\n    if self.text_changed:\n        title += \" *\"\n    self.root.title(title)\n```\n\n## Testing Your Editor\n\n### Test Scenarios\n- Create new file and add content\n- Open existing text files of various sizes\n- Save files with different names and locations\n- Test cut, copy, paste operations\n- Search for text and replace content\n- Test with special characters and Unicode\n\n### Edge Cases\n- Very large files (performance testing)\n- Files with different encodings\n- Read-only files\n- Network file locations\n- Invalid file paths\n\n## Extensions and Improvements\n\n### Beginner Extensions\n- Word count display\n- Simple spell checker\n- Text statistics (characters, lines, paragraphs)\n- Print functionality\n\n### Intermediate Extensions\n- Syntax highlighting for programming languages\n- Auto-completion for common words\n- Plugin system for extensions\n- Customizable keyboard shortcuts\n\n### Advanced Extensions\n- Multiple document interface with tabs\n- Project file management\n- Integration with version control systems\n- Collaborative editing features\n\n## Common Issues and Solutions\n\n**Issue**: Text encoding problems with special characters\n**Solution**: Always specify UTF-8 encoding when reading/writing files\n\n**Issue**: Large files cause application to freeze\n**Solution**: Implement progressive loading and text streaming\n\n**Issue**: Undo/redo not working properly\n**Solution**: Use tkinter's built-in undo functionality or implement custom stack\n\n**Issue**: Find/replace not finding all occurrences\n**Solution**: Implement proper text search algorithms and handle edge cases\n\n## Learning Outcomes\n\nAfter completing this project, you'll understand:\n- File I/O operations and error handling\n- GUI programming with tkinter\n- Event-driven programming concepts\n- Text processing and manipulation\n- User interface design principles\n- Software architecture and organization\n\n## File Structure\n\n```\nsimple_text_editor/\n├── basic_editor.py        # Phase 1 command-line version\n├── gui_editor.py          # Phase 2 basic GUI\n├── advanced_editor.py     # Phase 3 enhanced features\n├── full_editor.py         # Phase 4 complete version\n├── themes/                # Color themes and settings\n│   └── default.json\n├── icons/                 # UI icons (optional)\n└── README.md              # Project documentation\n```\n\n## Next Steps\n\nOnce you've completed your text editor:\n1. Use it to edit your other Python projects!\n2. Add your favorite text editing features\n3. Share your implementation and get feedback\n4. Consider adding syntax highlighting for Python\n5. Try the Contact Book project next for more GUI practice\n\nGreat job on building a practical productivity application!
+# Simple Text Editor Project
+
+Build a basic text editor application with file operations and text manipulation features.
+
+## Project Overview
+
+**What you'll build**: A text editor that can open, edit, and save text files with basic formatting and search functionality.
+
+**What you'll learn**:
+- File input/output operations
+- String manipulation and text processing
+- Basic GUI programming with tkinter
+- Event handling and user interface design
+- Working with text widgets and menus
+
+## Project Features
+
+### Basic Features
+- Open and display text files
+- Edit text content
+- Save files to disk
+- Basic menu system (File, Edit)
+- Text area with scrollbars
+
+### Advanced Features
+- Find and replace functionality
+- Cut, copy, paste operations
+- Undo/redo functionality
+- Word count and statistics
+- Basic text formatting
+- Multiple file tabs
+
+## Implementation Guide
+
+### Phase 1: Basic File Operations
+**Time**: 2-3 hours
+
+Create command-line text editor:
+- Read file contents
+- Allow text editing
+- Save changes back to file
+- Handle file errors
+
+**Key concepts**: File I/O, string operations, error handling
+
+### Phase 2: GUI Interface
+**Time**: 3-4 hours
+
+Build graphical interface:
+- Main window with text area
+- File menu (New, Open, Save, Exit)
+- Edit menu (Cut, Copy, Paste)
+- Status bar
+
+**Key concepts**: tkinter GUI, widgets, menu systems
+
+### Phase 3: Enhanced Editing
+**Time**: 3-4 hours
+
+Add advanced features:
+- Find and replace dialog
+- Undo/redo functionality
+- Line numbers display
+- Word wrap toggle
+- Font size and family selection
+
+**Key concepts**: Advanced GUI programming, text processing
+
+### Phase 4: Advanced Features
+**Time**: 4-5 hours
+
+Implement professional features:
+- Syntax highlighting for code
+- Multiple document interface
+- Auto-save functionality
+- Recent files menu
+- Customizable themes
+
+**Key concepts**: Advanced text processing, configuration management
+
+## Getting Started
+
+### Setup
+1. Create project directory
+2. Plan the user interface layout
+3. Design the file handling system
+
+### Basic Structure
+```python
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext
+
+class SimpleTextEditor:
+    def __init__(self, root):
+        self.root = root
+        self.current_file = None
+        self.text_changed = False
+        self.setup_ui()
+    
+    def setup_ui(self):
+        # Create menu bar
+        # Create text area
+        # Create status bar
+        pass
+```
+
+## User Interface Design
+
+### Main Window Layout
+- Menu bar at top (File, Edit, View, Help)
+- Toolbar with common actions (optional)
+- Large text editing area in center
+- Status bar at bottom showing line/column, word count
+- Scrollbars for text area
+
+### Menu Structure
+```
+File
+├── New (Ctrl+N)
+├── Open (Ctrl+O)
+├── Save (Ctrl+S)
+├── Save As (Ctrl+Shift+S)
+├── Recent Files
+└── Exit
+
+Edit
+├── Undo (Ctrl+Z)
+├── Redo (Ctrl+Y)
+├── Cut (Ctrl+X)
+├── Copy (Ctrl+C)
+├── Paste (Ctrl+V)
+├── Find (Ctrl+F)
+└── Replace (Ctrl+H)
+```
+
+## Core Functionality
+
+### File Operations
+- New file: Clear text area and reset file path
+- Open file: Use file dialog to select and load file
+- Save file: Write current text to file
+- Save As: Choose new location and save
+
+### Text Editing
+- Standard text input and editing
+- Keyboard shortcuts for common operations
+- Mouse support for selection and cursor positioning
+- Clipboard integration
+
+### Search and Replace
+- Find text with highlighting
+- Replace single or all occurrences
+- Case-sensitive option
+- Regular expression support (advanced)
+
+## Implementation Examples
+
+### Basic File Operations
+```python
+def open_file(self):
+    file_path = filedialog.askopenfilename(
+        title="Open File",
+        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+    )
+    if file_path:
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                self.text_area.delete(1.0, tk.END)
+                self.text_area.insert(1.0, content)
+                self.current_file = file_path
+                self.update_title()
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not open file: {e}")
+```
+
+### Text Change Detection
+```python
+def on_text_change(self, event=None):
+    self.text_changed = True
+    self.update_title()
+    self.update_status_bar()
+
+def update_title(self):
+    title = "Simple Text Editor"
+    if self.current_file:
+        title += f" - {os.path.basename(self.current_file)}"
+    if self.text_changed:
+        title += " *"
+    self.root.title(title)
+```
+
+## Testing Your Editor
+
+### Test Scenarios
+- Create new file and add content
+- Open existing text files of various sizes
+- Save files with different names and locations
+- Test cut, copy, paste operations
+- Search for text and replace content
+- Test with special characters and Unicode
+
+### Edge Cases
+- Very large files (performance testing)
+- Files with different encodings
+- Read-only files
+- Network file locations
+- Invalid file paths
+
+## Extensions and Improvements
+
+### Beginner Extensions
+- Word count display
+- Simple spell checker
+- Text statistics (characters, lines, paragraphs)
+- Print functionality
+
+### Intermediate Extensions
+- Syntax highlighting for programming languages
+- Auto-completion for common words
+- Plugin system for extensions
+- Customizable keyboard shortcuts
+
+### Advanced Extensions
+- Multiple document interface with tabs
+- Project file management
+- Integration with version control systems
+- Collaborative editing features
+
+## Common Issues and Solutions
+
+**Issue**: Text encoding problems with special characters
+**Solution**: Always specify UTF-8 encoding when reading/writing files
+
+**Issue**: Large files cause application to freeze
+**Solution**: Implement progressive loading and text streaming
+
+**Issue**: Undo/redo not working properly
+**Solution**: Use tkinter's built-in undo functionality or implement custom stack
+
+**Issue**: Find/replace not finding all occurrences
+**Solution**: Implement proper text search algorithms and handle edge cases
+
+## Learning Outcomes
+
+After completing this project, you'll understand:
+- File I/O operations and error handling
+- GUI programming with tkinter
+- Event-driven programming concepts
+- Text processing and manipulation
+- User interface design principles
+- Software architecture and organization
+
+## File Structure
+
+```
+simple_text_editor/
+├── basic_editor.py        # Phase 1 command-line version
+├── gui_editor.py          # Phase 2 basic GUI
+├── advanced_editor.py     # Phase 3 enhanced features
+├── full_editor.py         # Phase 4 complete version
+├── themes/                # Color themes and settings
+│   └── default.json
+├── icons/                 # UI icons (optional)
+└── README.md              # Project documentation
+```
+
+## Next Steps
+
+Once you've completed your text editor:
+1. Use it to edit your other Python projects!
+2. Add your favorite text editing features
+3. Share your implementation and get feedback
+4. Consider adding syntax highlighting for Python
+5. Try the Contact Book project next for more GUI practice
+
+Great job on building a practical productivity application!
